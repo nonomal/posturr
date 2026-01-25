@@ -42,7 +42,7 @@ If you accidentally denied permission, you can grant it later:
 
 ## Usage
 
-Once launched, Posturr runs in the background and displays a brief "Claude Mode Active" notification. The app:
+Once launched, Posturr runs in the background. The app:
 
 - Continuously monitors your posture through the camera
 - Applies screen blur when poor posture is detected
