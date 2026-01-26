@@ -797,16 +797,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func setupOverlayWindows() {
         for screen in NSScreen.screens {
-            let window = NSWindow(contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+            // Use visibleFrame to exclude the menu bar area
+            let frame = screen.visibleFrame
+            let window = NSWindow(contentRect: frame, styleMask: [.borderless], backing: .buffered, defer: false)
             window.isOpaque = false
             window.backgroundColor = .clear
-            window.level = .screenSaver
+            // Use a level below popUpMenu (101) so menu bar dropdowns appear above the blur
+            window.level = NSWindow.Level(rawValue: 100)
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             window.ignoresMouseEvents = true
             window.hasShadow = false
 
             // Use NSVisualEffectView - supports both private API mode and compatibility mode
-            let blurView = NSVisualEffectView(frame: NSRect(origin: .zero, size: screen.frame.size))
+            let blurView = NSVisualEffectView(frame: NSRect(origin: .zero, size: frame.size))
             blurView.blendingMode = .behindWindow
             blurView.material = .fullScreenUI
             blurView.state = .active
