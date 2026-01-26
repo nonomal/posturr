@@ -490,7 +490,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             case .noProfile:
                 statusMenuItem.title = "Status: Calibration needed"
             case .onTheGo:
-                statusMenuItem.title = "Status: Paused (on the go)"
+                statusMenuItem.title = "Status: Paused (on the go - recalibrate)"
             case .cameraDisconnected:
                 statusMenuItem.title = "Status: Camera disconnected"
             }
