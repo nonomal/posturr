@@ -28,7 +28,7 @@ class SettingsWindowController: NSObject, NSWindowDelegate {
         let hostingController = NSHostingController(rootView: settingsView)
 
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 580, height: 380),
+            contentRect: NSRect(x: 0, y: 0, width: 580, height: 460),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
@@ -150,6 +150,7 @@ struct SettingsView: View {
     @State private var availableCameras: [(id: String, name: String)] = []
     @State private var warningMode: WarningMode = .blur
     @State private var warningColor: Color = Color(WarningDefaults.color)
+    @State private var blurOnsetDelay: Double = 0.0
 
     let intensityValues: [Double] = [0.08, 0.15, 0.35, 0.65, 1.2]
     let intensityLabels = ["Gentle", "Easy", "Medium", "Firm", "Aggressive"]
@@ -256,6 +257,29 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                GroupBoxWithInfo("Blur Delay", helpText: "Grace period before blur activates. Allows brief glances at keyboard without triggering blur.") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Slider(value: $blurOnsetDelay, in: 0...30, step: 1)
+                            .onChange(of: blurOnsetDelay) { newValue in
+                                appDelegate.blurOnsetDelay = newValue
+                                appDelegate.saveSettings()
+                            }
+                        HStack {
+                            Text("0s")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text("\(Int(blurOnsetDelay))s")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                            Spacer()
+                            Text("30s")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
             }
             .frame(width: 240)
 
@@ -349,6 +373,7 @@ struct SettingsView: View {
         useCompatibilityMode = appDelegate.useCompatibilityMode
         warningMode = appDelegate.warningMode
         warningColor = Color(appDelegate.warningColor)
+        blurOnsetDelay = appDelegate.blurOnsetDelay
 
         // Set slider indices based on loaded values
         intensitySlider = Double(intensityValues.firstIndex(of: intensity) ?? 2)

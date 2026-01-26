@@ -46,6 +46,12 @@ EOF
 
 The release notes should describe what changed since the previous version, not generic feature lists.
 
+### Acknowledgments
+When implementing features or fixes from GitHub issues, always give credit to the person who suggested it:
+- In the GitHub release notes: "Thanks to @username for suggesting this!"
+- In CHANGELOG.md: Add an `### Acknowledgments` section with a link to their GitHub profile
+- In README.md: Add them to the Contributors section with a brief description of their contribution
+
 ### Update CHANGELOG.md
 After updating the GitHub release notes, also update `CHANGELOG.md` with a new entry:
 - Add the new version section at the top (after the header)

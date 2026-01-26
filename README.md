@@ -186,3 +186,4 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 - [@cam-br0wn](https://github.com/cam-br0wn) - Dock/App Switcher visibility toggle
 - [@einsteinx2](https://github.com/einsteinx2) - SwiftPM/Xcode support
 - [@ssisk](https://github.com/ssisk) - Screen lock pause feature suggestion
+- [@gcanyon](https://github.com/gcanyon) - Blur onset delay feature suggestion
