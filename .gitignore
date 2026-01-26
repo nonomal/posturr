@@ -13,6 +13,9 @@ blur
 *.swiftsourceinfo
 *.swiftdoc
 
+# IDE
+.vscode/
+
 # Xcode
 xcuserdata/
 *.xccheckout
@@ -24,6 +27,7 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 .swiftpm/
+.build/
 
 # Temporary files
 /tmp/
