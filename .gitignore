@@ -15,6 +15,7 @@ blur
 
 # IDE
 .vscode/
+.idea/
 
 # Xcode
 xcuserdata/
