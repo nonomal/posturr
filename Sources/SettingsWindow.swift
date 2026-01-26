@@ -150,7 +150,7 @@ struct SettingsView: View {
     @State private var availableCameras: [(id: String, name: String)] = []
     @State private var warningMode: WarningMode = .blur
     @State private var warningColor: Color = Color(WarningDefaults.color)
-    @State private var blurOnsetDelay: Double = 0.0
+    @State private var warningOnsetDelay: Double = 0.0
 
     let intensityValues: [Double] = [0.08, 0.15, 0.35, 0.65, 1.2]
     let intensityLabels = ["Gentle", "Easy", "Medium", "Firm", "Aggressive"]
@@ -260,9 +260,9 @@ struct SettingsView: View {
 
                 GroupBoxWithInfo("Warning Delay", helpText: "Grace period before warning activates. Allows brief glances at keyboard without triggering the warning.") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Slider(value: $blurOnsetDelay, in: 0...30, step: 1)
-                            .onChange(of: blurOnsetDelay) { newValue in
-                                appDelegate.blurOnsetDelay = newValue
+                        Slider(value: $warningOnsetDelay, in: 0...30, step: 1)
+                            .onChange(of: warningOnsetDelay) { newValue in
+                                appDelegate.warningOnsetDelay = newValue
                                 appDelegate.saveSettings()
                             }
                         HStack {
@@ -270,7 +270,7 @@ struct SettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(Int(blurOnsetDelay))s")
+                            Text("\(Int(warningOnsetDelay))s")
                                 .font(.caption)
                                 .fontWeight(.medium)
                             Spacer()
@@ -373,7 +373,7 @@ struct SettingsView: View {
         useCompatibilityMode = appDelegate.useCompatibilityMode
         warningMode = appDelegate.warningMode
         warningColor = Color(appDelegate.warningColor)
-        blurOnsetDelay = appDelegate.blurOnsetDelay
+        warningOnsetDelay = appDelegate.warningOnsetDelay
 
         // Set slider indices based on loaded values
         intensitySlider = Double(intensityValues.firstIndex(of: intensity) ?? 2)

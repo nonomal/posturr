@@ -28,7 +28,7 @@ enum SettingsKeys {
     static let profiles = "profiles"
     static let warningMode = "warningMode"
     static let warningColor = "warningColor"
-    static let blurOnsetDelay = "blurOnsetDelay"
+    static let warningOnsetDelay = "blurOnsetDelay"  // Keep key for backward compatibility
 }
 
 // MARK: - Profile Data

@@ -113,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var isCurrentlySlouching = false
 
     // Blur onset delay
-    var blurOnsetDelay: Double = 0.0
+    var warningOnsetDelay: Double = 0.0
     var badPostureStartTime: Date?
 
     // Frame throttling
@@ -754,7 +754,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         defaults.set(showInDock, forKey: SettingsKeys.showInDock)
         defaults.set(pauseOnTheGo, forKey: SettingsKeys.pauseOnTheGo)
         defaults.set(warningMode.rawValue, forKey: SettingsKeys.warningMode)
-        defaults.set(blurOnsetDelay, forKey: SettingsKeys.blurOnsetDelay)
+        defaults.set(warningOnsetDelay, forKey: SettingsKeys.warningOnsetDelay)
         if let colorData = try? NSKeyedArchiver.archivedData(withRootObject: warningColor, requiringSecureCoding: false) {
             defaults.set(colorData, forKey: SettingsKeys.warningColor)
         }
@@ -785,8 +785,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
            let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSColor.self, from: colorData) {
             warningColor = color
         }
-        if defaults.object(forKey: SettingsKeys.blurOnsetDelay) != nil {
-            blurOnsetDelay = defaults.double(forKey: SettingsKeys.blurOnsetDelay)
+        if defaults.object(forKey: SettingsKeys.warningOnsetDelay) != nil {
+            warningOnsetDelay = defaults.double(forKey: SettingsKeys.warningOnsetDelay)
         }
     }
 
@@ -1183,7 +1183,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
                 // Check if we've waited long enough for the blur onset delay
                 let elapsedTime = Date().timeIntervalSince(badPostureStartTime!)
-                guard elapsedTime >= blurOnsetDelay else {
+                guard elapsedTime >= warningOnsetDelay else {
                     // Still waiting for delay, don't activate blur yet
                     return
                 }
