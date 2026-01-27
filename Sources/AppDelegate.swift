@@ -376,28 +376,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         setupCamera()
 
+        // Note: We intentionally don't check pauseOnTheGo at startup.
+        // "Pause on the go" should only trigger when display config *changes*
+        // to laptop-only (e.g., unplugging external monitor), not at app launch.
+
         let configKey = getCurrentConfigKey()
         if let profile = loadProfile(forKey: configKey) {
             let cameras = getAvailableCameras()
             if cameras.contains(where: { $0.uniqueID == profile.cameraID }) {
                 selectedCameraID = profile.cameraID
                 applyProfile(profile)
-
-                if pauseOnTheGo && isLaptopOnlyConfiguration() {
-                    state = .paused(.onTheGo)
-                } else {
-                    state = .monitoring
-                }
+                state = .monitoring
                 return
             } else {
                 state = .paused(.cameraDisconnected)
                 return
             }
-        }
-
-        if pauseOnTheGo && isLaptopOnlyConfiguration() {
-            state = .paused(.onTheGo)
-            return
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
