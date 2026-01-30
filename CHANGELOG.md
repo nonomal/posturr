@@ -5,6 +5,14 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.8] - 2026-01-30
+
+### Added
+- Solid color warning style - fills the entire screen with a solid color overlay for a more aggressive visual cue
+
+### Acknowledgments
+- Thanks to [@karlmolina](https://github.com/karlmolina) for contributing this feature!
+
 ## [1.4.7] - 2026-01-29
 
 ### Added
