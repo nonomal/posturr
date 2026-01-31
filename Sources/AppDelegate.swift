@@ -88,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Tracking Source (Camera or AirPods)
     var trackingSource: TrackingSource = .camera
+    var headphoneMotionManager = HeadphoneMotionManager()
 
     // Display management
     var displayDebounceTimer: Timer?
@@ -414,7 +415,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         trackingSource = .airpods
         updateTrackingMenu()
         saveSettings()
-        // TODO: Step 2에서 피트니스 권한 요청 후 캘리브레이션 진행
+        
+        print("[Tracking] Switching to AirPods. Requesting data/permission...")
+        headphoneMotionManager.startTracking { [weak self] in
+            DispatchQueue.main.async {
+                print("[Tracking] AirPods data started. Proceeding to calibration if needed.")
+                // TODO: Step 3에서 캘리브레이션 로직 연결
+                // self?.startCalibration()
+                
+                // 임시: 상태를 모니터링으로 변경 테스트
+                self?.state = .monitoring
+            }
+        }
     }
 
     @objc func quit() {
