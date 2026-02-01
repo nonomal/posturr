@@ -5,6 +5,16 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-01-31
+
+### Added
+- Custom menu bar icons - seated figure icons that better represent posture states (good, bad, away, paused, calibrating)
+
+### Changed
+- Renamed "Statistics" to "Analytics" in menu
+- Renamed "Enabled" to "Enable" with standard macOS shortcut display
+- Disabled state now shows the paused icon for consistency
+
 ## [1.5.1] - 2026-01-31
 
 ### Added
