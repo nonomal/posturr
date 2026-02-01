@@ -2,6 +2,31 @@
 
 ## Releasing
 
+### Ship It (Full Release Workflow)
+
+When the user says "ship it", perform the complete release workflow:
+
+1. **Bump version** in `build.sh`
+2. **Commit** cleanup/feature changes with proper attribution
+3. **Merge** to main (if on a feature branch)
+4. **Run `./release.sh X.Y.Z`** - builds, signs, notarizes, creates GitHub release
+5. **Update release notes** with user-friendly description via `gh release edit`
+6. **Update CHANGELOG.md** with new version entry
+7. **Update README.md** contributors section if applicable
+8. **Commit and push** changelog/readme updates
+9. **Comment on PR/issue** thanking contributor and linking to release
+10. **Update Homebrew tap**:
+    ```bash
+    # Get SHA256
+    gh release view vX.Y.Z --repo tldev/posturr --json assets --jq '.assets[] | select(.name | endswith(".zip")) | .url' | xargs curl -sL | shasum -a 256 | cut -d' ' -f1
+
+    # Update tap
+    cd /tmp && rm -rf homebrew-tap && git clone git@github.com:tldev/homebrew-tap.git
+    cd homebrew-tap
+    # Update version and sha256 in Casks/posturr.rb
+    git add . && git commit -m "Update Posturr to vX.Y.Z" && git push
+    ```
+
 ### GitHub Release (Direct Distribution)
 
 **IMPORTANT: Before releasing, always check existing releases and tags:**
