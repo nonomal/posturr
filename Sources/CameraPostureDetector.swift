@@ -69,7 +69,7 @@ class CameraPostureDetector: NSObject, PostureDetector {
     // MARK: - Detection State
 
     private var currentNoseY: CGFloat = 0.5
-    private var currentFaceWidth: CGFloat = 0.0 // [Step 2]
+    private var currentFaceWidth: CGFloat = 0.0
     private var noseYHistory: [CGFloat] = []
     private let smoothingWindow = 5
     private var isCurrentlySlouching = false
@@ -135,35 +135,31 @@ class CameraPostureDetector: NSObject, PostureDetector {
     // MARK: - Calibration
 
     func getCurrentCalibrationValue() -> Any {
-        // [Step 2] Return tuple if we have width
         if currentFaceWidth > 0 {
-            return (currentNoseY, currentFaceWidth)
+            return CalibrationPoint(noseY: currentNoseY, faceWidth: currentFaceWidth)
         }
         return currentNoseY
     }
 
     func createCalibrationData(from points: [Any]) -> CalibrationData? {
-        // Points can be [CGFloat] or [(CGFloat, CGFloat)]
         var yValues: [CGFloat] = []
         var widthValues: [CGFloat] = []
-        
+
         for point in points {
-            if let y = point as? CGFloat {
+            if let calibrationPoint = point as? CalibrationPoint {
+                yValues.append(calibrationPoint.noseY)
+                widthValues.append(calibrationPoint.faceWidth)
+            } else if let y = point as? CGFloat {
                 yValues.append(y)
-            } else if let (y, width) = point as? (CGFloat, CGFloat) {
-                yValues.append(y)
-                widthValues.append(width)
             }
         }
-        
+
         guard yValues.count >= 4 else { return nil }
 
         let maxY = yValues.max() ?? 0.6
         let minY = yValues.min() ?? 0.4
         let avgY = yValues.reduce(0, +) / CGFloat(yValues.count)
         let range = abs(maxY - minY)
-        
-        // [Step 2] Calculate neutral face width
         let neutralWidth = widthValues.isEmpty ? 0.0 : widthValues.reduce(0, +) / CGFloat(widthValues.count)
 
         os_log(.info, log: log, "Created calibration: goodY=%.3f, badY=%.3f, range=%.3f, neutralWidth=%.3f", maxY, minY, range, neutralWidth)
@@ -323,7 +319,6 @@ class CameraPostureDetector: NSObject, PostureDetector {
         let faceRequest = VNDetectFaceRectanglesRequest { [weak self] request, error in
             if let results = request.results as? [VNFaceObservation], let face = results.first {
                 self?.consecutiveNoDetectionFrames = 0
-                // [Step 2] Also capture face width
                 self?.handleDetection(noseY: face.boundingBox.midY, faceWidth: face.boundingBox.width)
             } else {
                 self?.handleNoDetection()
@@ -340,11 +335,10 @@ class CameraPostureDetector: NSObject, PostureDetector {
         }
 
         // Send calibration update
-        // We pack (noseY, faceWidth) as calibration value if width exists
         if let width = faceWidth {
-             onCalibrationUpdate?((noseY, width))
+            onCalibrationUpdate?(CalibrationPoint(noseY: noseY, faceWidth: width))
         } else {
-             onCalibrationUpdate?(noseY)
+            onCalibrationUpdate?(noseY)
         }
 
         // Reset away state
@@ -378,71 +372,50 @@ class CameraPostureDetector: NSObject, PostureDetector {
         return noseYHistory.reduce(0, +) / CGFloat(noseYHistory.count)
     }
 
-
-    
-    // [Step 2] New evaluation logic for Head Size
     private func evaluatePosture(currentY: CGFloat, currentFaceWidth: CGFloat, calibration: CameraCalibrationData) {
         let smoothedY = smoothNoseY(currentY)
 
-        // 1. Existing Logic: Vertical Position (Slouching down)
+        // Vertical position detection (slouching down)
         let slouchAmount = calibration.badPostureY - smoothedY
         let deadZoneThreshold = deadZone * calibration.postureRange
-        
+
         let enterThreshold = deadZoneThreshold
         let exitThreshold = deadZoneThreshold * 0.7
         let threshold = isCurrentlySlouching ? exitThreshold : enterThreshold
-        
+
         var isBadPosture = slouchAmount > threshold
-        
-        // 2. [Step 2] New Logic: Head Size (Turtle Neck - moving closer)
-        // Only if we have valid calibration for width
+
+        // Forward-head detection (moving closer to screen)
+        let forwardHeadThreshold = 1.0 + max(CameraCalibrationData.forwardHeadBaseThreshold, deadZone)
+        var forwardHeadSeverity: Double = 0.0
+
         if calibration.neutralFaceWidth > 0 && currentFaceWidth > 0 {
             let ratio = currentFaceWidth / calibration.neutralFaceWidth
-            // Turtle neck threshold: if face is > 5% larger (plus deadzone buffer)
-            // This suggests head moved significantly closer to screen
-            let turtleNeckThreshold: CGFloat = 1.0 + max(0.05, deadZone)
-            
-            if ratio > turtleNeckThreshold {
-                 isBadPosture = true
-                 // We could differentiate "type" of bad posture in future, 
-                 // but for now, it just triggers the "Slouching" state.
+            if ratio > forwardHeadThreshold {
+                isBadPosture = true
+                let sizeExcess = ratio - forwardHeadThreshold
+                forwardHeadSeverity = min(1.0, max(0.0, Double(sizeExcess / CameraCalibrationData.forwardHeadSeverityRange)))
             }
         }
 
-        // Calculate severity (based on vertical only for now, or max of both?)
-        // Let's keep severity based on vertical for smooth blur transitions, 
-        // but force it to 1.0 if head size constraint is violated?
-        // Or just map head size ratio to severity too.
-        
+        // Calculate combined severity
         var severity: Double = 0.0
-        
+
         if isBadPosture {
-            // Calculate vertical severity
+            // Vertical severity
             let pastDeadZone = slouchAmount - deadZoneThreshold
             let remainingRange = max(0.01, calibration.postureRange - deadZoneThreshold)
             let verticalSeverity = min(1.0, max(0.0, pastDeadZone / remainingRange))
-            
-            severity = Double(verticalSeverity)
-            
-            // If triggered by head size, boost severity to ensure warning appears
-            if calibration.neutralFaceWidth > 0 && currentFaceWidth > 0 {
-                 let ratio = currentFaceWidth / calibration.neutralFaceWidth
-                 let turtleNeckThreshold: CGFloat = 1.0 + max(0.05, deadZone)
-                 if ratio > turtleNeckThreshold {
-                     // Map ratio excess to severity
-                     // e.g. 1.05 -> 0.0, 1.20 -> 1.0
-                     let sizeExcess = ratio - turtleNeckThreshold
-                     let sizeSeverity = min(1.0, max(0.0, sizeExcess / 0.15)) // 15% range beyond threshold
-                     severity = max(severity, Double(sizeSeverity))
-                     
-                     // If purely head-size triggered (and vertical is fine), 
-                     // meaningful severity is needed to trigger blur/overlay.
-                     if severity < 0.1 { severity = 0.5 } 
-                 }
+
+            severity = max(Double(verticalSeverity), forwardHeadSeverity)
+
+            // Ensure minimum severity when forward-head posture is detected
+            if forwardHeadSeverity > 0 && severity < CameraCalibrationData.forwardHeadMinSeverity {
+                severity = CameraCalibrationData.forwardHeadMinSeverity
             }
         }
 
-        // Update hystersis state
+        // Update hysteresis state
         if isBadPosture {
             isCurrentlySlouching = true
         } else if !isBadPosture && severity == 0 {

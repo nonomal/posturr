@@ -144,5 +144,3 @@ enum AppState: Equatable {
         }
     }
 }
-
-
