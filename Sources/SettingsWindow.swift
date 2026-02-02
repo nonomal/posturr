@@ -36,10 +36,11 @@ class SettingsWindowController: NSObject, NSWindowDelegate {
         let settingsView = SettingsView(appDelegate: appDelegate)
         let hostingController = NSHostingController(rootView: settingsView)
 
-        // Use fixed window size to avoid jolt when SwiftUI content loads
-        // Width matches SettingsView .frame(width: 720), height accommodates all content
+        // Calculate actual content size from SwiftUI view
+        let fittingSize = hostingController.sizeThatFits(in: CGSize(width: 640, height: CGFloat.greatestFiniteMagnitude))
+
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 720, height: 920),
+            contentRect: NSRect(x: 0, y: 0, width: fittingSize.width, height: fittingSize.height),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
@@ -98,26 +99,26 @@ struct SectionCard<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.brandCyan)
                 Text(title)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.primary)
             }
 
             content
         }
-        .padding(16)
+        .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(Color(NSColor.controlBackgroundColor))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(Color.primary.opacity(0.06), lineWidth: 1)
         )
     }
@@ -133,7 +134,7 @@ struct SettingRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.system(size: 13))
+                .font(.system(size: 12))
 
             HelpButton(text: helpText)
 
@@ -174,20 +175,20 @@ struct LabeledSlider: View {
     @State private var showingHelp = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 4) {
                 Text(title)
-                    .font(.system(size: 13))
+                    .font(.system(size: 12))
 
                 HelpButton(text: helpText)
 
                 Spacer()
 
                 Text(valueLabel)
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundColor(.brandCyan)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 3)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 2)
                     .background(
                         Capsule()
                             .fill(Color.brandCyan.opacity(0.12))
@@ -199,11 +200,11 @@ struct LabeledSlider: View {
 
             HStack {
                 Text(leftLabel)
-                    .font(.system(size: 10))
+                    .font(.system(size: 9))
                     .foregroundColor(.secondary.opacity(0.7))
                 Spacer()
                 Text(rightLabel)
-                    .font(.system(size: 10))
+                    .font(.system(size: 9))
                     .foregroundColor(.secondary.opacity(0.7))
             }
         }
@@ -302,26 +303,26 @@ struct TrackingSourcePicker: View {
 struct SettingsView: View {
     let appDelegate: AppDelegate
 
-    // Local state that syncs with AppDelegate
-    @State private var intensity: Double = 1.0
-    @State private var deadZone: Double = 0.03
-    @State private var intensitySlider: Double = 2
-    @State private var deadZoneSlider: Double = 2
-    @State private var blurWhenAway: Bool = false
-    @State private var showInDock: Bool = false
-    @State private var pauseOnTheGo: Bool = false
-    @State private var useCompatibilityMode: Bool = false
-    @State private var selectedCameraID: String = ""
-    @State private var availableCameras: [(id: String, name: String)] = []
-    @State private var warningMode: WarningMode = .blur
-    @State private var warningColor: Color = Color(WarningDefaults.color)
-    @State private var warningOnsetDelay: Double = 0.0
-    @State private var launchAtLogin: Bool = false
-    @State private var toggleShortcutEnabled: Bool = true
-    @State private var toggleShortcut: KeyboardShortcut = .defaultShortcut
-    @State private var detectionModeSlider: Double = 0
-    @State private var trackingSource: TrackingSource = .camera
-    @State private var airPodsAvailable: Bool = false
+    // Local state that syncs with AppDelegate - initialized from appDelegate in init()
+    @State private var intensity: Double
+    @State private var deadZone: Double
+    @State private var intensitySlider: Double
+    @State private var deadZoneSlider: Double
+    @State private var blurWhenAway: Bool
+    @State private var showInDock: Bool
+    @State private var pauseOnTheGo: Bool
+    @State private var useCompatibilityMode: Bool
+    @State private var selectedCameraID: String
+    @State private var availableCameras: [(id: String, name: String)]
+    @State private var warningMode: WarningMode
+    @State private var warningColor: Color
+    @State private var warningOnsetDelay: Double
+    @State private var launchAtLogin: Bool
+    @State private var toggleShortcutEnabled: Bool
+    @State private var toggleShortcut: KeyboardShortcut
+    @State private var detectionModeSlider: Double
+    @State private var trackingSource: TrackingSource
+    @State private var airPodsAvailable: Bool
 
     let detectionModes: [DetectionMode] = [.responsive, .balanced, .performance]
 
@@ -331,21 +332,49 @@ struct SettingsView: View {
     let deadZoneValues: [Double] = [0.0, 0.08, 0.15, 0.25, 0.40]
     let deadZoneLabels = ["Strict", "Tight", "Medium", "Relaxed", "Loose"]
 
+    init(appDelegate: AppDelegate) {
+        self.appDelegate = appDelegate
+
+        // Initialize all state from appDelegate synchronously to ensure correct sizing
+        let cameras = appDelegate.cameraDetector.getAvailableCameras()
+        let cameraList = cameras.map { (id: $0.uniqueID, name: $0.localizedName) }
+
+        _intensity = State(initialValue: appDelegate.intensity)
+        _deadZone = State(initialValue: appDelegate.deadZone)
+        _intensitySlider = State(initialValue: Double(intensityValues.firstIndex(of: appDelegate.intensity) ?? 2))
+        _deadZoneSlider = State(initialValue: Double(deadZoneValues.firstIndex(of: appDelegate.deadZone) ?? 2))
+        _blurWhenAway = State(initialValue: appDelegate.blurWhenAway)
+        _showInDock = State(initialValue: appDelegate.showInDock)
+        _pauseOnTheGo = State(initialValue: appDelegate.pauseOnTheGo)
+        _useCompatibilityMode = State(initialValue: appDelegate.useCompatibilityMode)
+        _selectedCameraID = State(initialValue: appDelegate.selectedCameraID ?? cameras.first?.uniqueID ?? "")
+        _availableCameras = State(initialValue: cameraList)
+        _warningMode = State(initialValue: appDelegate.warningMode)
+        _warningColor = State(initialValue: Color(appDelegate.warningColor))
+        _warningOnsetDelay = State(initialValue: appDelegate.warningOnsetDelay)
+        _launchAtLogin = State(initialValue: SMAppService.mainApp.status == .enabled)
+        _toggleShortcutEnabled = State(initialValue: appDelegate.toggleShortcutEnabled)
+        _toggleShortcut = State(initialValue: appDelegate.toggleShortcut)
+        _detectionModeSlider = State(initialValue: Double(detectionModes.firstIndex(of: appDelegate.detectionMode) ?? 0))
+        _trackingSource = State(initialValue: appDelegate.trackingSource)
+        _airPodsAvailable = State(initialValue: appDelegate.airPodsDetector.isAvailable)
+    }
+
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
                 // Header
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
                     if let appIcon = NSImage(named: NSImage.applicationIconName) {
                         Image(nsImage: appIcon)
                             .resizable()
-                            .frame(width: 52, height: 52)
-                            .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 2)
+                            .frame(width: 44, height: 44)
+                            .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 2)
                     }
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Posturr")
-                            .font(.system(size: 22, weight: .semibold))
+                            .font(.system(size: 20, weight: .semibold))
                         Text("Gentle posture reminders")
-                            .font(.system(size: 12))
+                            .font(.system(size: 11))
                             .foregroundColor(.secondary)
                     }
                     Spacer()
@@ -380,29 +409,29 @@ struct SettingsView: View {
                     // Version badge
                     if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
                         Text("v\(version)")
-                            .font(.system(size: 11, weight: .medium))
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.secondary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
                             .background(
                                 Capsule()
                                     .fill(Color.primary.opacity(0.05))
                             )
                     }
                 }
-                .padding(.bottom, 8)
+                .padding(.bottom, 4)
 
                 // Two column layout
-                HStack(alignment: .top, spacing: 16) {
+                HStack(alignment: .top, spacing: 12) {
                     // Left column - Detection
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         SectionCard("Tracking", icon: "figure.stand") {
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 10) {
                                 // Tracking method picker
                                 VStack(alignment: .leading, spacing: 8) {
                                     HStack(spacing: 4) {
                                         Text("Method")
-                                            .font(.system(size: 13))
+                                            .font(.system(size: 12))
                                         HelpButton(text: "Camera uses your webcam to track head position. AirPods uses motion sensors in compatible AirPods (Pro, Max, or 3rd gen) to detect head tilt.")
                                     }
 
@@ -417,25 +446,31 @@ struct SettingsView: View {
                                     }
                                 }
 
-                                // Camera picker (only when camera mode selected)
-                                if trackingSource == .camera && !availableCameras.isEmpty {
+                                // Camera picker (always shown when camera mode to maintain consistent height)
+                                if trackingSource == .camera {
                                     SubtleDivider()
 
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text("Camera")
-                                            .font(.system(size: 13))
+                                            .font(.system(size: 12))
 
-                                        Picker("", selection: $selectedCameraID) {
-                                            ForEach(availableCameras, id: \.id) { camera in
-                                                Text(camera.name).tag(camera.id)
+                                        if availableCameras.isEmpty {
+                                            Text("No cameras found")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(.secondary)
+                                        } else {
+                                            Picker("", selection: $selectedCameraID) {
+                                                ForEach(availableCameras, id: \.id) { camera in
+                                                    Text(camera.name).tag(camera.id)
+                                                }
                                             }
-                                        }
-                                        .labelsHidden()
-                                        .onChange(of: selectedCameraID) { newValue in
-                                            if newValue != appDelegate.selectedCameraID {
-                                                appDelegate.selectedCameraID = newValue
-                                                appDelegate.saveSettings()
-                                                appDelegate.restartCamera()
+                                            .labelsHidden()
+                                            .onChange(of: selectedCameraID) { newValue in
+                                                if newValue != appDelegate.selectedCameraID {
+                                                    appDelegate.selectedCameraID = newValue
+                                                    appDelegate.saveSettings()
+                                                    appDelegate.restartCamera()
+                                                }
                                             }
                                         }
                                     }
@@ -458,11 +493,11 @@ struct SettingsView: View {
                         }
 
                         SectionCard("Warning", icon: "eye") {
-                            VStack(alignment: .leading, spacing: 14) {
+                            VStack(alignment: .leading, spacing: 10) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     HStack(spacing: 4) {
                                         Text("Style")
-                                            .font(.system(size: 13))
+                                            .font(.system(size: 12))
 
                                         HelpButton(text: "How Posturr alerts you when slouching. Blur obscures the screen, Vignette shows a glow from the edges, Border shows colored borders, Solid fills the screen completely. None disables visual warnings.")
                                     }
@@ -478,7 +513,7 @@ struct SettingsView: View {
 
                                 HStack {
                                     Text("Color")
-                                        .font(.system(size: 13))
+                                        .font(.system(size: 12))
                                     Spacer()
                                     ColorPicker("", selection: $warningColor, supportsOpacity: false)
                                         .labelsHidden()
@@ -492,7 +527,7 @@ struct SettingsView: View {
                         }
 
                         SectionCard("Sensitivity", icon: "slider.horizontal.3") {
-                            VStack(spacing: 14) {
+                            VStack(spacing: 10) {
                                 LabeledSlider(
                                     title: "Dead Zone",
                                     helpText: "How much you can move before warning starts. A relaxed dead zone allows more natural movement.",
@@ -570,9 +605,9 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity)
 
                     // Right column - Behavior
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         SectionCard("Behavior", icon: "gearshape") {
-                            VStack(spacing: 12) {
+                            VStack(spacing: 10) {
                                 SettingRow(
                                     title: "Launch at login",
                                     helpText: "Automatically start Posturr when you log in to your Mac",
@@ -673,19 +708,19 @@ struct SettingsView: View {
                         }) {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")
-                                    .font(.system(size: 12, weight: .medium))
+                                    .font(.system(size: 11, weight: .medium))
                                 Text("Recalibrate Posture")
-                                    .font(.system(size: 13, weight: .medium))
+                                    .font(.system(size: 12, weight: .medium))
                             }
                             .foregroundColor(.brandCyan)
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
+                            .padding(.vertical, 10)
                             .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                RoundedRectangle(cornerRadius: 8, style: .continuous)
                                     .fill(Color.brandCyan.opacity(0.1))
                             )
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                RoundedRectangle(cornerRadius: 8, style: .continuous)
                                     .stroke(Color.brandCyan.opacity(0.3), lineWidth: 1)
                             )
                         }
@@ -695,43 +730,9 @@ struct SettingsView: View {
                 }
 
             }
-        .padding(24)
-        .frame(width: 720)
+        .padding(18)
+        .frame(width: 640)
         .fixedSize(horizontal: false, vertical: true)
-        .onAppear {
-            loadFromAppDelegate()
-        }
-    }
-
-    private func loadFromAppDelegate() {
-        intensity = appDelegate.intensity
-        deadZone = appDelegate.deadZone
-        blurWhenAway = appDelegate.blurWhenAway
-        showInDock = appDelegate.showInDock
-        pauseOnTheGo = appDelegate.pauseOnTheGo
-        useCompatibilityMode = appDelegate.useCompatibilityMode
-        warningMode = appDelegate.warningMode
-        warningColor = Color(appDelegate.warningColor)
-        warningOnsetDelay = appDelegate.warningOnsetDelay
-        toggleShortcutEnabled = appDelegate.toggleShortcutEnabled
-        toggleShortcut = appDelegate.toggleShortcut
-        detectionModeSlider = Double(detectionModes.firstIndex(of: appDelegate.detectionMode) ?? 0)
-
-        // Set slider indices based on loaded values
-        intensitySlider = Double(intensityValues.firstIndex(of: intensity) ?? 2)
-        deadZoneSlider = Double(deadZoneValues.firstIndex(of: deadZone) ?? 2)
-
-        // Load tracking source
-        trackingSource = appDelegate.trackingSource
-        airPodsAvailable = appDelegate.airPodsDetector.isAvailable
-
-        // Load cameras
-        let cameras = appDelegate.cameraDetector.getAvailableCameras()
-        availableCameras = cameras.map { (id: $0.uniqueID, name: $0.localizedName) }
-        selectedCameraID = appDelegate.selectedCameraID ?? cameras.first?.uniqueID ?? ""
-
-        // Load launch at login state from system
-        launchAtLogin = SMAppService.mainApp.status == .enabled
     }
 }
 
@@ -938,7 +939,7 @@ struct ShortcutRecorderView: View {
     var body: some View {
         HStack {
             Text("Shortcut")
-                .font(.system(size: 13))
+                .font(.system(size: 12))
 
             HelpButton(text: "Global keyboard shortcut to quickly enable or disable Posturr from anywhere. Click the shortcut field and press your desired key combination.")
 
