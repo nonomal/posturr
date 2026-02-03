@@ -123,6 +123,7 @@ struct CompactToggle: View {
     let title: String
     let helpText: String
     @Binding var isOn: Bool
+    var isDisabled: Bool = false
 
     var body: some View {
         HStack(spacing: 6) {
@@ -132,10 +133,13 @@ struct CompactToggle: View {
                 .labelsHidden()
                 .scaleEffect(0.65)
                 .frame(width: 32)
+                .disabled(isDisabled)
+                .opacity(isDisabled ? 0.5 : 1.0)
 
             Text(title)
                 .font(.system(size: 11))
                 .lineLimit(1)
+                .opacity(isDisabled ? 0.5 : 1.0)
 
             HelpButton(text: helpText)
 
@@ -143,7 +147,9 @@ struct CompactToggle: View {
         }
         .frame(height: 22)
         .contentShape(Rectangle())
-        .onTapGesture { isOn.toggle() }
+        .onTapGesture {
+            if !isDisabled { isOn.toggle() }
+        }
     }
 }
 
@@ -578,8 +584,11 @@ struct SettingsView: View {
                 HStack(spacing: 0) {
                     CompactToggle(
                         title: "Blur when away",
-                        helpText: "Apply full blur when you step away",
-                        isOn: $blurWhenAway
+                        helpText: trackingSource == .airpods
+                            ? "Apply full blur when you step away. Only available when using camera for detection."
+                            : "Apply full blur when you step away",
+                        isOn: $blurWhenAway,
+                        isDisabled: trackingSource == .airpods
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .onChange(of: blurWhenAway) { newValue in
