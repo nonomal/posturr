@@ -5,9 +5,9 @@ import AppKit
 class CalibrationView: NSView {
     var targetPosition: NSPoint = .zero
     var pulsePhase: CGFloat = 0
-    var instructionText: String = "Look at the ring and press Space"
+    var instructionText: String = "Look at the ring and tap Space"
     var stepText: String = "Step 1 of 4"
-    var hintText: String = "Move your head naturally \u{2022} Press Space when ready"
+    var hintText: String = "Move your head naturally \u{2022} Tap Space when ready"
     var showRing: Bool = true
     var waitingForAirPods: Bool = false
 
