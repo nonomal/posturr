@@ -225,3 +225,4 @@ Want this on Linux? See [postured](https://github.com/vadi2/postured).
 - [@gcanyon](https://github.com/gcanyon) - Warning onset delay feature suggestion
 - [@javabudd](https://github.com/javabudd) - Analytics dashboard
 - [@danielroek](https://github.com/danielroek) - "None" warning style option
+- [@claaslange](https://github.com/claaslange) - Camera compatibility issue with professional cameras

@@ -5,6 +5,14 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.5] - 2026-02-03
+
+### Fixed
+- Camera compatibility with professional cameras and capture cards (e.g., Elgato with Nikon mirrorless) - resolved distorted, green-tinted video during calibration by using standard VGA resolution and RGB color format
+
+### Acknowledgments
+- Thanks to [@claaslange](https://github.com/claaslange) for reporting this issue!
+
 ## [1.5.4] - 2026-02-02
 
 ### Fixed
