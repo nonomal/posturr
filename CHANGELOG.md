@@ -5,6 +5,14 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.10] - 2026-02-04
+
+### Changed
+- Reduced CPU usage by skipping unnecessary work when posture is good
+
+### Acknowledgments
+- Thanks to [@SHxKM](https://github.com/SHxKM) for reporting high CPU usage in AirPods mode!
+
 ## [1.5.9] - 2026-02-03
 
 ### Changed
