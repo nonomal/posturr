@@ -44,8 +44,7 @@ Posturr monitors your posture in real-time using either your Mac's camera or Air
 ### Homebrew (Recommended)
 
 ```bash
-brew tap tldev/tap
-brew install --cask posturr
+brew install posturr
 ```
 
 ### Manual Download
