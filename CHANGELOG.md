@@ -5,6 +5,17 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.2] - 2026-02-05
+
+### Fixed
+- More accurate posture analytics — time tracking now uses actual elapsed time between readings instead of assumed intervals
+
+### Changed
+- Improved type safety throughout the calibration pipeline
+- Better thread safety with proper main-thread isolation
+- Defensive input handling in the posture engine
+- Added comprehensive test coverage for analytics, calibration, settings profiles, and display monitoring
+
 ## [1.7.1] - 2026-02-04
 
 ### Changed
