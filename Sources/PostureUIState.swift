@@ -27,7 +27,7 @@ struct PostureUIState: Equatable {
         switch appState {
         case .disabled:
             return PostureUIState(
-                statusText: "Status: Disabled",
+                statusText: L("status.disabled"),
                 icon: .paused,
                 isEnabled: false,
                 canRecalibrate: true
@@ -35,7 +35,7 @@ struct PostureUIState: Equatable {
 
         case .calibrating:
             return PostureUIState(
-                statusText: "Status: Calibrating...",
+                statusText: L("status.calibrating"),
                 icon: .calibrating,
                 isEnabled: true,
                 canRecalibrate: false
@@ -71,30 +71,30 @@ struct PostureUIState: Equatable {
         isCurrentlySlouching: Bool
     ) -> (String, MenuBarIconType) {
         guard isCalibrated else {
-            return ("Status: Starting...", .good)
+            return (L("status.starting"), .good)
         }
 
         if isCurrentlyAway {
-            return ("Status: Away", .away)
+            return (L("status.away"), .away)
         } else if isCurrentlySlouching {
-            return ("Status: Slouching", .bad)
+            return (L("status.slouching"), .bad)
         } else {
-            return ("Status: Good Posture", .good)
+            return (L("status.goodPosture"), .good)
         }
     }
 
     private static func pausedStatusText(reason: PauseReason, trackingSource: TrackingSource) -> String {
         switch reason {
         case .noProfile:
-            return "Status: Calibration needed"
+            return L("status.calibrationNeeded")
         case .onTheGo:
-            return "Status: Paused (on the go - recalibrate)"
+            return L("status.pausedOnTheGo")
         case .cameraDisconnected:
-            return trackingSource == .camera ? "Status: Camera disconnected" : "Status: AirPods disconnected"
+            return trackingSource == .camera ? L("status.cameraDisconnected") : L("status.airPodsDisconnected")
         case .screenLocked:
-            return "Status: Paused (screen locked)"
+            return L("status.pausedScreenLocked")
         case .airPodsRemoved:
-            return "Status: Paused (put in AirPods)"
+            return L("status.pausedPutInAirPods")
         }
     }
 }

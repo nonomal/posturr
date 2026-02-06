@@ -42,7 +42,7 @@ class OnboardingWindowController: NSObject, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "Welcome to Posturr"
+        window.title = L("onboarding.title")
         window.contentViewController = hostingController
         window.isReleasedWhenClosed = false
         window.delegate = self
@@ -86,10 +86,10 @@ struct OnboardingView: View {
                         .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 2)
                 }
 
-                Text("Welcome to Posturr")
+                Text(L("onboarding.title"))
                     .font(.system(size: 24, weight: .semibold))
 
-                Text("Choose how you want to track your posture")
+                Text(L("onboarding.subtitle"))
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }
@@ -122,7 +122,7 @@ struct OnboardingView: View {
             // Camera selection (only when camera is selected)
             if selectedSource == .camera && !availableCameras.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Select Camera")
+                    Text(L("onboarding.selectCamera"))
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.secondary)
 
@@ -139,7 +139,7 @@ struct OnboardingView: View {
             // Paired AirPods list (when AirPods is selected)
             if selectedSource == .airpods && !pairedAirPods.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Paired AirPods")
+                    Text(L("onboarding.pairedAirPods"))
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.secondary)
 
@@ -186,7 +186,7 @@ struct OnboardingView: View {
                 onComplete(selectedSource, cameraID)
             }) {
                 HStack {
-                    Text("Continue")
+                    Text(L("onboarding.continue"))
                         .font(.system(size: 14, weight: .semibold))
                     Image(systemName: "arrow.right")
                         .font(.system(size: 12, weight: .semibold))
@@ -254,7 +254,7 @@ struct TrackingOptionCard: View {
                             .foregroundColor(isAvailable ? .primary : .secondary.opacity(0.5))
 
                         if !isAvailable {
-                            Text("Unavailable")
+                            Text(L("onboarding.unavailable"))
                                 .font(.system(size: 10, weight: .medium))
                                 .foregroundColor(.secondary)
                                 .padding(.horizontal, 6)

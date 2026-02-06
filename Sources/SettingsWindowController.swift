@@ -32,7 +32,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "Settings"
+        window.title = L("settings.title")
         window.contentViewController = hostingController
         window.isReleasedWhenClosed = false
         window.delegate = self

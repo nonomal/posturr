@@ -5,9 +5,8 @@ import AppKit
 class CalibrationView: NSView {
     var targetPosition: NSPoint = .zero
     var pulsePhase: CGFloat = 0
-    var instructionText: String = "Look at the ring and tap Space"
-    var stepText: String = "Step 1 of 4"
-    var hintText: String = "Tap Space while looking at the ring"
+    var instructionText: String = L("calibration.lookAtRing")
+    var stepText: String = L("calibration.stepOf", 1, 4)
     var showRing: Bool = true
     var waitingForAirPods: Bool = false
 
@@ -86,10 +85,8 @@ class CalibrationView: NSView {
 
         // Draw hint with keycap for Space
         let hintY = bounds.midY - 70
-        drawHintWithKeycap(
-            prefix: "Tap ",
-            keycap: "Space",
-            suffix: " while looking at the ring",
+        drawLocalizedHintWithKeycap(
+            text: L("calibration.hint.tapSpace"),
             centerY: hintY,
             textColor: NSColor.cyan,
             fontSize: 18
@@ -97,17 +94,15 @@ class CalibrationView: NSView {
 
         // Draw escape hint with keycap for Esc
         let escapeY = bounds.midY - 110
-        drawHintWithKeycap(
-            prefix: "",
-            keycap: "Esc",
-            suffix: " to skip calibration",
+        drawLocalizedHintWithKeycap(
+            text: L("calibration.hint.escToSkip"),
             centerY: escapeY,
             textColor: NSColor.white.withAlphaComponent(0.5),
             fontSize: 14
         )
     }
 
-    private func drawHintWithKeycap(prefix: String, keycap: String, suffix: String, centerY: CGFloat, textColor: NSColor, fontSize: CGFloat) {
+    private func drawLocalizedHintWithKeycap(text: String, centerY: CGFloat, textColor: NSColor, fontSize: CGFloat) {
         let font = NSFont.systemFont(ofSize: fontSize, weight: .medium)
         let keycapFont = NSFont.systemFont(ofSize: fontSize - 1, weight: .semibold)
 
@@ -120,52 +115,70 @@ class CalibrationView: NSView {
             .foregroundColor: NSColor.white
         ]
 
-        // Measure each part
-        let prefixSize = (prefix as NSString).size(withAttributes: textAttrs)
-        let keycapTextSize = (keycap as NSString).size(withAttributes: keycapTextAttrs)
-        let suffixSize = (suffix as NSString).size(withAttributes: textAttrs)
-
-        // Keycap padding
         let keycapPaddingH: CGFloat = 8
         let keycapPaddingV: CGFloat = 4
-        let keycapWidth = keycapTextSize.width + keycapPaddingH * 2
-        let keycapHeight = keycapTextSize.height + keycapPaddingV * 2
 
-        // Total width
-        let totalWidth = prefixSize.width + keycapWidth + suffixSize.width
-        let startX = (bounds.width - totalWidth) / 2
+        // Parse format string: "Tap {Space} while looking at the ring"
+        // into segments: [("Tap ", false), ("Space", true), (" while looking at the ring", false)]
+        var segments: [(text: String, isKeycap: Bool)] = []
+        var remaining = text
+        while let openBrace = remaining.range(of: "{") {
+            let prefix = String(remaining[remaining.startIndex..<openBrace.lowerBound])
+            if !prefix.isEmpty {
+                segments.append((prefix, false))
+            }
+            remaining = String(remaining[openBrace.upperBound...])
+            if let closeBrace = remaining.range(of: "}") {
+                let keycap = String(remaining[remaining.startIndex..<closeBrace.lowerBound])
+                segments.append((keycap, true))
+                remaining = String(remaining[closeBrace.upperBound...])
+            }
+        }
+        if !remaining.isEmpty {
+            segments.append((remaining, false))
+        }
 
-        // Draw prefix
-        var currentX = startX
-        let prefixPoint = NSPoint(x: currentX, y: centerY)
-        (prefix as NSString).draw(at: prefixPoint, withAttributes: textAttrs)
-        currentX += prefixSize.width
+        // Calculate total width
+        var totalWidth: CGFloat = 0
+        for segment in segments {
+            if segment.isKeycap {
+                let keycapTextSize = (segment.text as NSString).size(withAttributes: keycapTextAttrs)
+                totalWidth += keycapTextSize.width + keycapPaddingH * 2
+            } else {
+                totalWidth += (segment.text as NSString).size(withAttributes: textAttrs).width
+            }
+        }
 
-        // Draw keycap background (centered on text baseline)
-        let keycapRect = NSRect(
-            x: currentX,
-            y: centerY - keycapPaddingV,
-            width: keycapWidth,
-            height: keycapHeight
-        )
-        let keycapPath = NSBezierPath(roundedRect: keycapRect, xRadius: 5, yRadius: 5)
+        var currentX = (bounds.width - totalWidth) / 2
 
-        // Keycap style: dark background with subtle border
-        NSColor.white.withAlphaComponent(0.15).setFill()
-        keycapPath.fill()
-        NSColor.white.withAlphaComponent(0.3).setStroke()
-        keycapPath.lineWidth = 1
-        keycapPath.stroke()
+        for segment in segments {
+            if segment.isKeycap {
+                let keycapTextSize = (segment.text as NSString).size(withAttributes: keycapTextAttrs)
+                let keycapWidth = keycapTextSize.width + keycapPaddingH * 2
+                let keycapHeight = keycapTextSize.height + keycapPaddingV * 2
 
-        // Draw keycap text (vertically centered in keycap)
-        let keycapTextY = keycapRect.minY + (keycapRect.height - keycapTextSize.height) / 2
-        let keycapTextPoint = NSPoint(x: currentX + keycapPaddingH, y: keycapTextY)
-        (keycap as NSString).draw(at: keycapTextPoint, withAttributes: keycapTextAttrs)
-        currentX += keycapWidth
+                let keycapRect = NSRect(
+                    x: currentX,
+                    y: centerY - keycapPaddingV,
+                    width: keycapWidth,
+                    height: keycapHeight
+                )
+                let keycapPath = NSBezierPath(roundedRect: keycapRect, xRadius: 5, yRadius: 5)
 
-        // Draw suffix
-        let suffixPoint = NSPoint(x: currentX, y: centerY)
-        (suffix as NSString).draw(at: suffixPoint, withAttributes: textAttrs)
+                NSColor.white.withAlphaComponent(0.15).setFill()
+                keycapPath.fill()
+                NSColor.white.withAlphaComponent(0.3).setStroke()
+                keycapPath.lineWidth = 1
+                keycapPath.stroke()
+
+                let keycapTextY = keycapRect.minY + (keycapRect.height - keycapTextSize.height) / 2
+                (segment.text as NSString).draw(at: NSPoint(x: currentX + keycapPaddingH, y: keycapTextY), withAttributes: keycapTextAttrs)
+                currentX += keycapWidth
+            } else {
+                (segment.text as NSString).draw(at: NSPoint(x: currentX, y: centerY), withAttributes: textAttrs)
+                currentX += (segment.text as NSString).size(withAttributes: textAttrs).width
+            }
+        }
     }
 
     private func drawWaitingForAirPods() {
@@ -188,7 +201,7 @@ class CalibrationView: NSView {
             .paragraphStyle: paragraphStyle
         ]
         let titleRect = NSRect(x: 0, y: bounds.midY - 30, width: bounds.width, height: 45)
-        ("Put in your AirPods" as NSString).draw(in: titleRect, withAttributes: titleAttrs)
+        (L("calibration.airpods.putIn") as NSString).draw(in: titleRect, withAttributes: titleAttrs)
 
         // Subtitle
         let subtitleAttrs: [NSAttributedString.Key: Any] = [
@@ -197,16 +210,15 @@ class CalibrationView: NSView {
             .paragraphStyle: paragraphStyle
         ]
         let subtitleRect = NSRect(x: 0, y: bounds.midY - 70, width: bounds.width, height: 30)
-        ("Calibration will begin automatically" as NSString).draw(in: subtitleRect, withAttributes: subtitleAttrs)
+        (L("calibration.airpods.autoBegin") as NSString).draw(in: subtitleRect, withAttributes: subtitleAttrs)
 
-        // Escape hint
-        let escapeAttrs: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 14, weight: .regular),
-            .foregroundColor: NSColor.white.withAlphaComponent(0.5),
-            .paragraphStyle: paragraphStyle
-        ]
-        let escapeRect = NSRect(x: 0, y: bounds.midY - 120, width: bounds.width, height: 25)
-        ("Press Escape to cancel" as NSString).draw(in: escapeRect, withAttributes: escapeAttrs)
+        // Escape hint (keycap style)
+        drawLocalizedHintWithKeycap(
+            text: L("calibration.airpods.escToCancel"),
+            centerY: bounds.midY - 120,
+            textColor: NSColor.white.withAlphaComponent(0.5),
+            fontSize: 14
+        )
     }
 }
 
@@ -258,10 +270,10 @@ class CalibrationWindowController: NSObject {
 
         var name: String {
             switch self {
-            case .topLeft: return "top-left"
-            case .topRight: return "top-right"
-            case .bottomLeft: return "bottom-left"
-            case .bottomRight: return "bottom-right"
+            case .topLeft: return L("calibration.corner.topLeft")
+            case .topRight: return L("calibration.corner.topRight")
+            case .bottomLeft: return L("calibration.corner.bottomLeft")
+            case .bottomRight: return L("calibration.corner.bottomRight")
             }
         }
     }
@@ -275,7 +287,7 @@ class CalibrationWindowController: NSObject {
         for screenIndex in 0..<NSScreen.screens.count {
             for corner in corners {
                 steps.append(CalibrationStep(
-                    instruction: "Look at the \(corner.name) corner",
+                    instruction: L("calibration.lookAtCorner", corner.name),
                     screenIndex: screenIndex,
                     corner: corner
                 ))
@@ -407,11 +419,11 @@ class CalibrationWindowController: NSObject {
                 view.showRing = true
                 view.targetPosition = step.corner.position(in: view.bounds)
                 view.instructionText = step.instruction
-                view.stepText = "Step \(currentStep + 1) of \(steps.count)"
+                view.stepText = L("calibration.stepOf", currentStep + 1, steps.count)
             } else {
                 view.showRing = false
-                view.instructionText = "Look at the other screen"
-                view.stepText = "Step \(currentStep + 1) of \(steps.count)"
+                view.instructionText = L("calibration.lookOtherScreen")
+                view.stepText = L("calibration.stepOf", currentStep + 1, steps.count)
             }
             view.needsDisplay = true
         }

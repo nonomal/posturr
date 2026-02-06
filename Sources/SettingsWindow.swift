@@ -32,7 +32,7 @@ struct CompactSlider: View {
             HStack(spacing: 3) {
                 Text(title)
                     .font(.system(size: 11))
-                    .frame(width: 62, alignment: .leading)
+                    .frame(width: 82, alignment: .leading)
                 HelpButton(text: helpText)
             }
 
@@ -402,23 +402,15 @@ struct SubtleDivider: View {
 extension WarningMode {
     var displayName: String {
         switch self {
-        case .blur: return "Blur"
-        case .vignette: return "Vignette"
-        case .border: return "Border"
-        case .solid: return "Solid"
-        case .none: return "None"
+        case .blur: return L("warningMode.blur")
+        case .vignette: return L("warningMode.vignette")
+        case .border: return L("warningMode.border")
+        case .solid: return L("warningMode.solid")
+        case .none: return L("warningMode.none")
         }
     }
 
-    var shortName: String {
-        switch self {
-        case .blur: return "Blur"
-        case .vignette: return "Vignette"
-        case .border: return "Border"
-        case .solid: return "Solid"
-        case .none: return "None"
-        }
-    }
+    var shortName: String { displayName }
 }
 
 // MARK: - Settings View
@@ -463,10 +455,10 @@ struct SettingsView: View {
     let detectionModes: [DetectionMode] = [.responsive, .balanced, .performance]
 
     let intensityValues: [Double] = [0.08, 0.15, 0.35, 0.65, 1.2]
-    let intensityLabels = ["Gentle", "Easy", "Medium", "Firm", "Aggressive"]
+    var intensityLabels: [String] { [L("settings.intensity.gentle"), L("settings.intensity.easy"), L("settings.intensity.medium"), L("settings.intensity.firm"), L("settings.intensity.aggressive")] }
 
     let deadZoneValues: [Double] = [0.0, 0.08, 0.15, 0.25, 0.40]
-    let deadZoneLabels = ["Strict", "Tight", "Medium", "Relaxed", "Loose"]
+    var deadZoneLabels: [String] { [L("settings.deadZone.strict"), L("settings.deadZone.tight"), L("settings.deadZone.medium"), L("settings.deadZone.relaxed"), L("settings.deadZone.loose")] }
 
     init(appDelegate: AppDelegate) {
         self.init(appDelegate: appDelegate, settingsProfileManager: appDelegate.settingsProfileManager)
@@ -541,7 +533,7 @@ struct SettingsView: View {
                     .onHover { hovering in
                         if hovering { NSCursor.pointingHand.push() } else { NSCursor.pop() }
                     }
-                    .help("View on GitHub")
+                    .help(L("settings.viewOnGitHub"))
 
                     Link(destination: URL(string: "https://discord.gg/6Ufy2SnXDW")!) {
                         DiscordIcon(color: Color.secondary.opacity(0.6))
@@ -553,7 +545,7 @@ struct SettingsView: View {
                     .onHover { hovering in
                         if hovering { NSCursor.pointingHand.push() } else { NSCursor.pop() }
                     }
-                    .help("Join Discord")
+                    .help(L("settings.joinDiscord"))
                 }
 
                 if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -571,9 +563,9 @@ struct SettingsView: View {
 
             // Tracking row (not part of profile)
             HStack(spacing: 8) {
-                Text("Tracking")
+                Text(L("settings.tracking"))
                     .font(.system(size: 11, weight: .medium))
-                    .frame(width: 58, alignment: .leading)
+                    .frame(width: 82, alignment: .leading)
 
                 CompactTrackingSourcePicker(
                     selection: $trackingSource,
@@ -588,7 +580,7 @@ struct SettingsView: View {
 
                 if trackingSource == .camera {
                     if availableCameras.isEmpty {
-                        Text("No cameras")
+                        Text(L("settings.noCameras"))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     } else {
@@ -613,7 +605,7 @@ struct SettingsView: View {
                         Image(systemName: airPodsAvailable ? "checkmark.circle.fill" : "exclamationmark.circle")
                             .foregroundColor(airPodsAvailable ? .green : .secondary)
                             .font(.system(size: 10))
-                        Text(airPodsAvailable ? "Connected" : "Not connected")
+                        Text(airPodsAvailable ? L("settings.connected") : L("settings.notConnected"))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -625,7 +617,7 @@ struct SettingsView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .font(.system(size: 10, weight: .semibold))
-                        Text("Recalibrate")
+                        Text(L("settings.recalibrate"))
                             .font(.system(size: 11, weight: .medium))
                     }
                     .foregroundColor(.onBrandCyan)
@@ -646,10 +638,10 @@ struct SettingsView: View {
                 // Profile header row - aligned with Warning row below
                 HStack(spacing: 8) {
                     HStack(spacing: 3) {
-                        Text("Profile")
+                        Text(L("settings.profile"))
                             .font(.system(size: 11, weight: .medium))
-                            .frame(width: 62, alignment: .leading)
-                        HelpButton(text: "Save different configurations for different situations. Switch profiles to instantly apply all settings below.")
+                            .frame(width: 82, alignment: .leading)
+                        HelpButton(text: L("settings.profile.help"))
                     }
 
                     HStack(spacing: 4) {
@@ -672,7 +664,7 @@ struct SettingsView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: "plus")
                                     .font(.system(size: 10, weight: .semibold))
-                                Text("New")
+                                Text(L("settings.profile.new"))
                                     .font(.system(size: 11, weight: .medium))
                             }
                             .foregroundColor(.onBrandCyan)
@@ -710,10 +702,10 @@ struct SettingsView: View {
                 // Warning row
                 HStack(spacing: 8) {
                     HStack(spacing: 3) {
-                        Text("Warning")
+                        Text(L("settings.warning"))
                             .font(.system(size: 11))
-                            .frame(width: 62, alignment: .leading)
-                        HelpButton(text: "Blur obscures the screen, Vignette shows edge glow, Border shows colored borders, Solid fills screen. None disables visual warnings.")
+                            .frame(width: 82, alignment: .leading)
+                        HelpButton(text: L("settings.warning.help"))
                     }
 
                     CompactWarningStylePicker(selection: $warningMode)
@@ -734,8 +726,8 @@ struct SettingsView: View {
 
                 // Sliders
                 CompactSlider(
-                    title: "Dead Zone",
-                    helpText: "How much you can move before warning starts. A relaxed dead zone allows more natural movement.",
+                    title: L("settings.deadZone"),
+                    helpText: L("settings.deadZone.help"),
                     value: $deadZoneSlider,
                     range: 0...4,
                     step: 1,
@@ -749,8 +741,8 @@ struct SettingsView: View {
                 }
 
                 CompactSlider(
-                    title: "Intensity",
-                    helpText: "How quickly the warning increases as you slouch past the dead zone.",
+                    title: L("settings.intensity"),
+                    helpText: L("settings.intensity.help"),
                     value: $intensitySlider,
                     range: 0...4,
                     step: 1,
@@ -764,8 +756,8 @@ struct SettingsView: View {
                 }
 
                 CompactSlider(
-                    title: "Delay",
-                    helpText: "Grace period before warning activates. Allows brief glances at keyboard without triggering.",
+                    title: L("settings.delay"),
+                    helpText: L("settings.delay.help"),
                     value: $warningOnsetDelay,
                     range: 0...30,
                     step: 1,
@@ -777,8 +769,8 @@ struct SettingsView: View {
                 }
 
                 CompactSlider(
-                    title: "Detection",
-                    helpText: "Balance responsiveness vs battery. Responsive detects quickly, Performance saves battery.",
+                    title: L("settings.detection"),
+                    helpText: L("settings.detection.help"),
                     value: $detectionModeSlider,
                     range: 0...2,
                     step: 1,
@@ -803,8 +795,8 @@ struct SettingsView: View {
             VStack(spacing: 6) {
                 HStack(spacing: 0) {
                     CompactToggle(
-                        title: "Launch at login",
-                        helpText: "Automatically start Posturr when you log in",
+                        title: L("settings.launchAtLogin"),
+                        helpText: L("settings.launchAtLogin.help"),
                         isOn: $launchAtLogin
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -821,8 +813,8 @@ struct SettingsView: View {
                     }
 
                     CompactToggle(
-                        title: "Show in dock",
-                        helpText: "Keep Posturr in Dock and Cmd+Tab",
+                        title: L("settings.showInDock"),
+                        helpText: L("settings.showInDock.help"),
                         isOn: $showInDock
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -839,10 +831,10 @@ struct SettingsView: View {
 
                 HStack(spacing: 0) {
                     CompactToggle(
-                        title: "Blur when away",
+                        title: L("settings.blurWhenAway"),
                         helpText: trackingSource == .airpods
-                            ? "Apply full blur when you step away. Only available when using camera for detection."
-                            : "Apply full blur when you step away",
+                            ? L("settings.blurWhenAway.help.airpods")
+                            : L("settings.blurWhenAway.help.camera"),
                         isOn: $blurWhenAway,
                         isDisabled: trackingSource == .airpods
                     )
@@ -853,8 +845,8 @@ struct SettingsView: View {
                     }
 
                     CompactToggle(
-                        title: "Pause on the go",
-                        helpText: "Auto-pause on laptop-only display",
+                        title: L("settings.pauseOnTheGo"),
+                        helpText: L("settings.pauseOnTheGo.help"),
                         isOn: $pauseOnTheGo
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -883,8 +875,8 @@ struct SettingsView: View {
 
                     #if !APP_STORE
                     CompactToggle(
-                        title: "Compatibility mode",
-                        helpText: "Enable if blur isn't appearing",
+                        title: L("settings.compatibilityMode"),
+                        helpText: L("settings.compatibilityMode.help"),
                         isOn: $useCompatibilityMode
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -907,10 +899,10 @@ struct SettingsView: View {
         .padding(16)
         .frame(width: 480)
         .fixedSize(horizontal: false, vertical: true)
-        .alert("New Profile", isPresented: $showingNewProfilePrompt) {
-            TextField("Profile name", text: $newProfileName)
-            Button("Cancel", role: .cancel) {}
-            Button("Create") {
+        .alert(L("settings.profile.newTitle"), isPresented: $showingNewProfilePrompt) {
+            TextField(L("settings.profile.namePlaceholder"), text: $newProfileName)
+            Button(L("common.cancel"), role: .cancel) {}
+            Button(L("settings.profile.create")) {
                 let trimmedName = newProfileName.trimmingCharacters(in: .whitespacesAndNewlines)
                 let profileName = trimmedName.isEmpty ? nextDefaultProfileName() : trimmedName
                 let profile = settingsProfileManager.createProfile(
@@ -928,11 +920,11 @@ struct SettingsView: View {
                 syncProfileSettings()
             }
         } message: {
-            Text("Name your settings profile.")
+            Text(L("settings.profile.namePrompt"))
         }
-        .alert("Delete Profile", isPresented: $showingDeleteConfirmation) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert(L("settings.profile.deleteTitle"), isPresented: $showingDeleteConfirmation) {
+            Button(L("common.cancel"), role: .cancel) {}
+            Button(L("settings.profile.delete"), role: .destructive) {
                 if settingsProfileManager.deleteProfile(id: selectedSettingsProfileID) {
                     settingsProfiles = settingsProfileManager.settingsProfiles
                     if let newID = settingsProfileManager.currentSettingsProfileID {
@@ -944,7 +936,7 @@ struct SettingsView: View {
                 }
             }
         } message: {
-            Text("Are you sure you want to delete this profile? This cannot be undone.")
+            Text(L("settings.profile.deleteMessage"))
         }
     }
 
@@ -1202,10 +1194,10 @@ struct CompactShortcutRecorder: View {
                     onShortcutChange()
                 }
 
-            Text("Shortcut")
+            Text(L("settings.shortcut"))
                 .font(.system(size: 11))
 
-            HelpButton(text: "Global keyboard shortcut to toggle Posturr. Click the field and press your desired key combination.")
+            HelpButton(text: L("settings.shortcut.help"))
 
             Button(action: {
                 isRecording.toggle()
@@ -1215,7 +1207,7 @@ struct CompactShortcutRecorder: View {
                     stopRecording()
                 }
             }) {
-                Text(isRecording ? "Press..." : shortcut.displayString)
+                Text(isRecording ? L("settings.shortcut.press") : shortcut.displayString)
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundColor(isRecording ? .secondary : (isEnabled ? .primary : .secondary))
                     .lineLimit(1)

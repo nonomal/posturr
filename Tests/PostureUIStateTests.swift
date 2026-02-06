@@ -14,7 +14,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Disabled")
+        XCTAssertEqual(uiState.statusText, L("status.disabled"))
         XCTAssertEqual(uiState.icon, .paused)
         XCTAssertFalse(uiState.isEnabled)
         XCTAssertTrue(uiState.canRecalibrate)
@@ -31,7 +31,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Calibrating...")
+        XCTAssertEqual(uiState.statusText, L("status.calibrating"))
         XCTAssertEqual(uiState.icon, .calibrating)
         XCTAssertTrue(uiState.isEnabled)
         XCTAssertFalse(uiState.canRecalibrate)
@@ -48,7 +48,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Good Posture")
+        XCTAssertEqual(uiState.statusText, L("status.goodPosture"))
         XCTAssertEqual(uiState.icon, .good)
         XCTAssertTrue(uiState.isEnabled)
     }
@@ -62,7 +62,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Slouching")
+        XCTAssertEqual(uiState.statusText, L("status.slouching"))
         XCTAssertEqual(uiState.icon, .bad)
     }
 
@@ -75,7 +75,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Away")
+        XCTAssertEqual(uiState.statusText, L("status.away"))
         XCTAssertEqual(uiState.icon, .away)
     }
 
@@ -88,7 +88,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Away")
+        XCTAssertEqual(uiState.statusText, L("status.away"))
         XCTAssertEqual(uiState.icon, .away)
     }
 
@@ -101,7 +101,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Starting...")
+        XCTAssertEqual(uiState.statusText, L("status.starting"))
         XCTAssertEqual(uiState.icon, .good)
     }
 
@@ -116,7 +116,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Calibration needed")
+        XCTAssertEqual(uiState.statusText, L("status.calibrationNeeded"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 
@@ -129,7 +129,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Paused (on the go - recalibrate)")
+        XCTAssertEqual(uiState.statusText, L("status.pausedOnTheGo"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 
@@ -142,7 +142,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Camera disconnected")
+        XCTAssertEqual(uiState.statusText, L("status.cameraDisconnected"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 
@@ -155,7 +155,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .airpods
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: AirPods disconnected")
+        XCTAssertEqual(uiState.statusText, L("status.airPodsDisconnected"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 
@@ -168,7 +168,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .camera
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Paused (screen locked)")
+        XCTAssertEqual(uiState.statusText, L("status.pausedScreenLocked"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 
@@ -181,7 +181,7 @@ final class PostureUIStateTests: XCTestCase {
             trackingSource: .airpods
         )
 
-        XCTAssertEqual(uiState.statusText, "Status: Paused (put in AirPods)")
+        XCTAssertEqual(uiState.statusText, L("status.pausedPutInAirPods"))
         XCTAssertEqual(uiState.icon, .paused)
     }
 }

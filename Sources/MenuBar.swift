@@ -26,41 +26,41 @@ final class MenuBarManager {
         let menu = NSMenu()
 
         // Status
-        statusMenuItem = NSMenuItem(title: "Status: Starting...", action: nil, keyEquivalent: "")
+        statusMenuItem = NSMenuItem(title: L("menu.status.starting"), action: nil, keyEquivalent: "")
         statusMenuItem.isEnabled = false
         menu.addItem(statusMenuItem)
 
         menu.addItem(NSMenuItem.separator())
 
         // Enabled toggle
-        enabledMenuItem = NSMenuItem(title: "Enable", action: #selector(handleToggleEnabled), keyEquivalent: "")
+        enabledMenuItem = NSMenuItem(title: L("menu.enable"), action: #selector(handleToggleEnabled), keyEquivalent: "")
         enabledMenuItem.target = self
         enabledMenuItem.state = .on
         menu.addItem(enabledMenuItem)
 
         // Recalibrate
-        recalibrateMenuItem = NSMenuItem(title: "Recalibrate", action: #selector(handleRecalibrate), keyEquivalent: "r")
+        recalibrateMenuItem = NSMenuItem(title: L("menu.recalibrate"), action: #selector(handleRecalibrate), keyEquivalent: "r")
         recalibrateMenuItem.target = self
         menu.addItem(recalibrateMenuItem)
 
         menu.addItem(NSMenuItem.separator())
 
         // Analytics
-        let statsItem = NSMenuItem(title: "Analytics", action: #selector(handleShowAnalytics), keyEquivalent: "a")
+        let statsItem = NSMenuItem(title: L("menu.analytics"), action: #selector(handleShowAnalytics), keyEquivalent: "a")
         statsItem.target = self
-        statsItem.image = NSImage(systemSymbolName: "chart.bar.xaxis", accessibilityDescription: "Analytics")
+        statsItem.image = NSImage(systemSymbolName: "chart.bar.xaxis", accessibilityDescription: L("menu.analytics"))
         menu.addItem(statsItem)
 
         // Settings
-        let settingsItem = NSMenuItem(title: "Settings", action: #selector(handleOpenSettings), keyEquivalent: ",")
+        let settingsItem = NSMenuItem(title: L("menu.settings"), action: #selector(handleOpenSettings), keyEquivalent: ",")
         settingsItem.target = self
-        settingsItem.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: "Settings")
+        settingsItem.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: L("menu.settings"))
         menu.addItem(settingsItem)
 
         menu.addItem(NSMenuItem.separator())
 
         // Quit
-        let quitItem = NSMenuItem(title: "Quit", action: #selector(handleQuit), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: L("menu.quit"), action: #selector(handleQuit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
 

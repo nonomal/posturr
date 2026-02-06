@@ -618,12 +618,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
 
                     let alert = NSAlert()
                     alert.alertStyle = .warning
-                    alert.messageText = "Permission Required"
+                    alert.messageText = L("alert.permissionRequired")
                     alert.informativeText = self.trackingSource == .airpods
-                        ? "Motion & Fitness Activity permission is required for AirPods tracking. Please enable it in System Settings > Privacy & Security > Motion & Fitness Activity."
-                        : "Camera permission is required. Please enable it in System Settings > Privacy & Security > Camera."
-                    alert.addButton(withTitle: "Open Settings")
-                    alert.addButton(withTitle: "Cancel")
+                        ? L("alert.permissionRequired.airpods")
+                        : L("alert.permissionRequired.camera")
+                    alert.addButton(withTitle: L("alert.openSettings"))
+                    alert.addButton(withTitle: L("common.cancel"))
                     NSApp.activate(ignoringOtherApps: true)
                     if alert.runModal() == .alertFirstButtonReturn {
                         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy")!)
@@ -655,10 +655,10 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
                     if self.trackingSource == .camera {
                         let alert = NSAlert()
                         alert.alertStyle = .warning
-                        alert.messageText = "Camera Not Available"
-                        alert.informativeText = error ?? "Please make sure your camera is connected and camera access is granted."
-                        alert.addButton(withTitle: "Try Again")
-                        alert.addButton(withTitle: "Cancel")
+                        alert.messageText = L("alert.cameraNotAvailable")
+                        alert.informativeText = error ?? L("alert.cameraNotAvailable.message")
+                        alert.addButton(withTitle: L("alert.tryAgain"))
+                        alert.addButton(withTitle: L("common.cancel"))
                         NSApp.activate(ignoringOtherApps: true)
                         if alert.runModal() == .alertFirstButtonReturn {
                             self.startCalibration()

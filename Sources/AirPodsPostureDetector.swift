@@ -11,7 +11,7 @@ struct PairedAirPods {
     let isCompatible: Bool
 
     var compatibilityText: String {
-        isCompatible ? "Compatible" : "No motion sensors"
+        isCompatible ? L("airpods.compatible") : L("airpods.noMotionSensors")
     }
 }
 
@@ -31,10 +31,10 @@ class AirPodsPostureDetector: NSObject, PostureDetector {
 
     var unavailableReason: String? {
         if #unavailable(macOS 14.0) {
-            return "Requires macOS 14.0 or later"
+            return L("airpods.requiresMacOS14")
         }
         if !isAvailable {
-            return "No compatible AirPods connected"
+            return L("airpods.noCompatibleConnected")
         }
         return nil
     }
@@ -190,7 +190,7 @@ class AirPodsPostureDetector: NSObject, PostureDetector {
     func start(completion: @escaping (Bool, String?) -> Void) {
         guard #available(macOS 14.0, *) else {
             os_log(.error, log: log, "macOS 14.0+ required for AirPods tracking")
-            completion(false, "Requires macOS 14.0 or later")
+            completion(false, L("airpods.requiresMacOS14"))
             return
         }
 
@@ -199,12 +199,12 @@ class AirPodsPostureDetector: NSObject, PostureDetector {
         }
 
         guard let manager = motionManager else {
-            completion(false, "Failed to create motion manager")
+            completion(false, L("airpods.failedCreateManager"))
             return
         }
 
         guard manager.isDeviceMotionAvailable else {
-            completion(false, "No compatible AirPods paired. Please pair AirPods Pro, Max, or 3rd gen.")
+            completion(false, L("airpods.noCompatiblePaired"))
             return
         }
 

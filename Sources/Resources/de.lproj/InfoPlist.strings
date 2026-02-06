@@ -1,0 +1,5 @@
+/* Info.plist localized strings */
+
+"NSCameraUsageDescription" = "Posturr benötigt Kamerazugriff, um Ihre Haltung zu überwachen und den Bildschirm bei schlechter Haltung unscharf zu machen.";
+"NSMotionUsageDescription" = "Posturr benötigt Zugriff auf Bewegungsdaten, um Ihre Haltung über AirPods zu überwachen.";
+"NSBluetoothAlwaysUsageDescription" = "Posturr verwendet Bluetooth, um gekoppelte AirPods für die Kopfbewegungserkennung zu erkennen.";

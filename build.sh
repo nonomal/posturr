@@ -142,6 +142,17 @@ cat > "$CONTENTS/Info.plist" << EOF
     <true/>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>es</string>
+        <string>fr</string>
+        <string>de</string>
+        <string>ja</string>
+        <string>zh-Hans</string>
+    </array>
 </dict>
 </plist>
 EOF
@@ -162,6 +173,16 @@ if [ -d "$SOURCES_DIR/Icons" ]; then
     echo "Copying custom menu bar icons..."
     mkdir -p "$RESOURCES_DIR/Icons"
     cp "$SOURCES_DIR/Icons"/*.pdf "$RESOURCES_DIR/Icons/" 2>/dev/null || true
+fi
+
+# Copy localization resources
+if [ -d "$SOURCES_DIR/Resources" ]; then
+    echo "Copying localization resources..."
+    for lproj in "$SOURCES_DIR/Resources"/*.lproj; do
+        if [ -d "$lproj" ]; then
+            cp -r "$lproj" "$RESOURCES_DIR/"
+        fi
+    done
 fi
 
 # Create entitlements file

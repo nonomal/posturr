@@ -1,0 +1,5 @@
+/* Info.plist localized strings */
+
+"NSCameraUsageDescription" = "Posturr necesita acceso a la cámara para monitorear tu postura y desenfocar la pantalla cuando te encorvas.";
+"NSMotionUsageDescription" = "Posturr necesita acceso a los datos de movimiento para monitorear tu postura mediante AirPods.";
+"NSBluetoothAlwaysUsageDescription" = "Posturr usa Bluetooth para detectar AirPods vinculados para el seguimiento del movimiento de la cabeza.";

@@ -64,11 +64,11 @@ enum MenuBarIcon: String, CaseIterable {
     /// Accessibility description for the icon
     private var accessibilityDescription: String {
         switch self {
-        case .good: return "Good Posture"
-        case .bad: return "Bad Posture"
-        case .away: return "Away"
-        case .paused: return "Paused"
-        case .calibrating: return "Calibrating"
+        case .good: return L("accessibility.goodPosture")
+        case .bad: return L("accessibility.badPosture")
+        case .away: return L("accessibility.away")
+        case .paused: return L("accessibility.paused")
+        case .calibrating: return L("accessibility.calibrating")
         }
     }
 
@@ -143,9 +143,9 @@ enum DetectionMode: String, CaseIterable, Codable {
 
     var displayName: String {
         switch self {
-        case .responsive: return "Responsive"
-        case .balanced: return "Balanced"
-        case .performance: return "Performance"
+        case .responsive: return L("detectionMode.responsive")
+        case .balanced: return L("detectionMode.balanced")
+        case .performance: return L("detectionMode.performance")
         }
     }
 }

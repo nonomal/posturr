@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "Posturr",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v13)
     ],
@@ -15,6 +16,9 @@ let package = Package(
             name: "PosturrCore",
             path: "Sources",
             exclude: ["App", "Icons"],
+            resources: [
+                .process("Resources")
+            ],
             linkerSettings: [
                 .linkedFramework("AppKit"),
                 .linkedFramework("AVFoundation"),

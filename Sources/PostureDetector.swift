@@ -83,8 +83,8 @@ enum TrackingSource: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .camera: return "Camera"
-        case .airpods: return "AirPods"
+        case .camera: return L("trackingSource.camera")
+        case .airpods: return L("trackingSource.airpods")
         }
     }
 
@@ -98,18 +98,18 @@ enum TrackingSource: String, Codable, CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .camera:
-            return "Uses your camera to track head position. Works with any Mac camera."
+            return L("trackingSource.camera.description")
         case .airpods:
-            return "Uses motion sensors to detect head tilt. Requires AirPods Pro, Max, or 3rd gen."
+            return L("trackingSource.airpods.description")
         }
     }
 
     var requirementDescription: String {
         switch self {
         case .camera:
-            return "Requires camera access"
+            return L("trackingSource.camera.requirement")
         case .airpods:
-            return "Requires macOS 14+ and compatible AirPods"
+            return L("trackingSource.airpods.requirement")
         }
     }
 }

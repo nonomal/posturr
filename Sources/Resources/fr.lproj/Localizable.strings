@@ -1,0 +1,186 @@
+/* Posturr - French Localizable Strings */
+
+// MARK: - Menu Bar (MenuBar.swift)
+
+"menu.status.starting" = "État : Démarrage...";
+"menu.enable" = "Activer";
+"menu.recalibrate" = "Recalibrer";
+"menu.analytics" = "Statistiques";
+"menu.settings" = "Réglages";
+"menu.quit" = "Quitter";
+
+// MARK: - App Menu (PosturrMain.swift)
+
+"appmenu.quit" = "Quitter Posturr";
+"appmenu.closeWindow" = "Fermer la fenêtre";
+"appmenu.file" = "Fichier";
+"appmenu.edit" = "Édition";
+"appmenu.undo" = "Annuler";
+"appmenu.redo" = "Rétablir";
+"appmenu.cut" = "Couper";
+"appmenu.copy" = "Copier";
+"appmenu.paste" = "Coller";
+"appmenu.selectAll" = "Tout sélectionner";
+
+// MARK: - Status Text (PostureUIState.swift)
+
+"status.disabled" = "État : Désactivé";
+"status.calibrating" = "État : Calibration...";
+"status.starting" = "État : Démarrage...";
+"status.away" = "État : Absent";
+"status.slouching" = "État : Mauvaise posture";
+"status.goodPosture" = "État : Bonne posture";
+"status.calibrationNeeded" = "État : Calibration nécessaire";
+"status.pausedOnTheGo" = "État : En pause (en déplacement - recalibrer)";
+"status.cameraDisconnected" = "État : Caméra déconnectée";
+"status.airPodsDisconnected" = "État : AirPods déconnectés";
+"status.pausedScreenLocked" = "État : En pause (écran verrouillé)";
+"status.pausedPutInAirPods" = "État : En pause (mettez vos AirPods)";
+
+// MARK: - Menu Bar Icon Accessibility (Models.swift)
+
+"accessibility.goodPosture" = "Bonne posture";
+"accessibility.badPosture" = "Mauvaise posture";
+"accessibility.away" = "Absent";
+"accessibility.paused" = "En pause";
+"accessibility.calibrating" = "Calibration";
+
+// MARK: - Warning Mode (SettingsWindow.swift)
+
+"warningMode.blur" = "Flou";
+"warningMode.vignette" = "Vignette";
+"warningMode.border" = "Bordure";
+"warningMode.solid" = "Plein";
+"warningMode.none" = "Aucun";
+
+// MARK: - Detection Mode (Models.swift)
+
+"detectionMode.responsive" = "Réactif";
+"detectionMode.balanced" = "Équilibré";
+"detectionMode.performance" = "Performance";
+
+// MARK: - Tracking Source (PostureDetector.swift)
+
+"trackingSource.camera" = "Caméra";
+"trackingSource.airpods" = "AirPods";
+"trackingSource.camera.description" = "Utilise la caméra pour suivre la position de la tête. Fonctionne avec toute caméra Mac.";
+"trackingSource.airpods.description" = "Utilise les capteurs de mouvement pour détecter l'inclinaison de la tête. Nécessite des AirPods Pro, Max ou 3e génération.";
+"trackingSource.camera.requirement" = "Nécessite l'accès à la caméra";
+"trackingSource.airpods.requirement" = "Nécessite macOS 14+ et des AirPods compatibles";
+
+// MARK: - AirPods Detector (AirPodsPostureDetector.swift)
+
+"airpods.compatible" = "Compatibles";
+"airpods.noMotionSensors" = "Pas de capteurs de mouvement";
+"airpods.requiresMacOS14" = "Nécessite macOS 14.0 ou ultérieur";
+"airpods.noCompatibleConnected" = "Aucun AirPods compatible connecté";
+"airpods.failedCreateManager" = "Échec de la création du gestionnaire de mouvement";
+"airpods.noCompatiblePaired" = "Aucun AirPods compatible jumelé. Veuillez jumeler des AirPods Pro, Max ou 3e génération.";
+
+// MARK: - Alerts (AppDelegate.swift)
+
+"alert.permissionRequired" = "Autorisation requise";
+"alert.permissionRequired.airpods" = "L'autorisation Activité physique et mouvement est requise pour le suivi AirPods. Activez-la dans Réglages du système > Confidentialité et sécurité > Activité physique et mouvement.";
+"alert.permissionRequired.camera" = "L'autorisation de la caméra est requise. Activez-la dans Réglages du système > Confidentialité et sécurité > Caméra.";
+"alert.openSettings" = "Ouvrir les réglages";
+"alert.cameraNotAvailable" = "Caméra non disponible";
+"alert.cameraNotAvailable.message" = "Vérifiez que la caméra est connectée et que l'accès à la caméra est autorisé.";
+"alert.tryAgain" = "Réessayer";
+
+// MARK: - Calibration (CalibrationWindow.swift)
+
+"calibration.lookAtRing" = "Regardez l'anneau et appuyez sur Espace";
+"calibration.stepOf" = "Étape %d sur %d";
+"calibration.lookAtCorner" = "Regardez le coin %@";
+"calibration.lookOtherScreen" = "Regardez l'autre écran";
+"calibration.corner.topLeft" = "supérieur gauche";
+"calibration.corner.topRight" = "supérieur droit";
+"calibration.corner.bottomLeft" = "inférieur gauche";
+"calibration.corner.bottomRight" = "inférieur droit";
+/* {BracedText} is rendered as a keyboard keycap — keep the braces and English key name intact */
+"calibration.hint.tapSpace" = "Appuyez sur {Space} en regardant l'anneau";
+"calibration.hint.escToSkip" = "{Esc} pour ignorer la calibration";
+"calibration.airpods.putIn" = "Mettez vos AirPods";
+"calibration.airpods.autoBegin" = "La calibration commencera automatiquement";
+"calibration.airpods.escToCancel" = "Appuyez sur {Esc} pour annuler";
+
+// MARK: - Settings Window (SettingsWindow.swift)
+
+"settings.title" = "Réglages";
+"settings.tracking" = "Suivi";
+"settings.noCameras" = "Aucune caméra";
+"settings.connected" = "Connecté";
+"settings.notConnected" = "Non connecté";
+"settings.recalibrate" = "Recalibrer";
+"settings.profile" = "Profil";
+"settings.profile.help" = "Enregistrez différentes configurations pour différentes situations. Changez de profil pour appliquer instantanément tous les réglages.";
+"settings.profile.new" = "Nouveau";
+"settings.profile.newTitle" = "Nouveau profil";
+"settings.profile.namePrompt" = "Nommez votre profil de réglages.";
+"settings.profile.namePlaceholder" = "Nom du profil";
+"settings.profile.create" = "Créer";
+"settings.profile.deleteTitle" = "Supprimer le profil";
+"settings.profile.deleteMessage" = "Voulez-vous vraiment supprimer ce profil ? Cette action est irréversible.";
+"settings.profile.delete" = "Supprimer";
+"settings.warning" = "Avertissement";
+"settings.warning.help" = "Flou obscurcit l'écran, Vignette affiche un halo sur les bords, Bordure affiche des bordures colorées, Plein remplit l'écran. Aucun désactive les avertissements visuels.";
+"settings.deadZone" = "Zone morte";
+"settings.deadZone.help" = "L'amplitude de mouvement autorisée avant le déclenchement de l'avertissement. Une zone morte détendue permet plus de mouvements naturels.";
+"settings.intensity" = "Intensité";
+"settings.intensity.help" = "La vitesse à laquelle l'avertissement augmente lorsque vous vous avachissez au-delà de la zone morte.";
+"settings.delay" = "Délai";
+"settings.delay.help" = "Délai de grâce avant l'activation de l'avertissement. Permet de jeter un coup d'œil au clavier sans le déclencher.";
+"settings.detection" = "Détection";
+"settings.detection.help" = "Équilibre entre réactivité et batterie. Réactif détecte rapidement, Performance économise la batterie.";
+"settings.launchAtLogin" = "Lancer au démarrage";
+"settings.launchAtLogin.help" = "Démarrer Posturr automatiquement à l'ouverture de session";
+"settings.showInDock" = "Afficher dans le Dock";
+"settings.showInDock.help" = "Garder Posturr dans le Dock et Cmd+Tab";
+"settings.blurWhenAway" = "Flouter en cas d'absence";
+"settings.blurWhenAway.help.camera" = "Appliquer un flou complet lorsque vous vous absentez";
+"settings.blurWhenAway.help.airpods" = "Appliquer un flou complet lorsque vous vous absentez. Disponible uniquement avec la caméra pour la détection.";
+"settings.pauseOnTheGo" = "Pause en déplacement";
+"settings.pauseOnTheGo.help" = "Pause automatique sur l'écran du portable uniquement";
+"settings.shortcut" = "Raccourci";
+"settings.shortcut.help" = "Raccourci clavier global pour activer/désactiver Posturr. Cliquez sur le champ et appuyez sur la combinaison de touches souhaitée.";
+"settings.shortcut.press" = "Appuyez...";
+"settings.compatibilityMode" = "Mode de compatibilité";
+"settings.compatibilityMode.help" = "Activez si le flou n'apparaît pas";
+"settings.viewOnGitHub" = "Voir sur GitHub";
+"settings.joinDiscord" = "Rejoindre Discord";
+
+// Settings slider labels
+"settings.deadZone.strict" = "Strict";
+"settings.deadZone.tight" = "Serré";
+"settings.deadZone.medium" = "Moyen";
+"settings.deadZone.relaxed" = "Détendu";
+"settings.deadZone.loose" = "Souple";
+"settings.intensity.gentle" = "Doux";
+"settings.intensity.easy" = "Léger";
+"settings.intensity.medium" = "Moyen";
+"settings.intensity.firm" = "Ferme";
+"settings.intensity.aggressive" = "Agressif";
+
+// MARK: - Analytics (AnalyticsWindow.swift)
+
+"analytics.title" = "Statistiques";
+"analytics.header" = "Statistiques de posture";
+"analytics.tagline" = "Suivez vos habitudes et votre amélioration au fil du temps";
+"analytics.todayScore" = "Score du jour";
+"analytics.monitoringTime" = "Temps de suivi";
+"analytics.slouchDuration" = "Durée d'avachissement";
+"analytics.slouchEvents" = "Épisodes de mauvaise posture";
+"analytics.last7Days" = "7 derniers jours";
+
+// MARK: - Onboarding (OnboardingWindow.swift)
+
+"onboarding.title" = "Bienvenue dans Posturr";
+"onboarding.subtitle" = "Choisissez comment suivre votre posture";
+"onboarding.selectCamera" = "Sélectionner la caméra";
+"onboarding.pairedAirPods" = "AirPods jumelés";
+"onboarding.unavailable" = "Indisponible";
+"onboarding.continue" = "Continuer";
+
+// MARK: - Common
+
+"common.cancel" = "Annuler";
