@@ -5,6 +5,17 @@ All notable changes to Posturr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-02-05
+
+### Added
+- Localization support for 6 languages: English, Spanish, French, German, Japanese, and Simplified Chinese
+- Locale-aware duration and percentage formatting
+- Localized system permission prompts (camera, motion, Bluetooth)
+- Debug logging for missing localization keys
+
+### Changed
+- Improved calibration screen keycap text rendering with caching and malformed-input handling
+
 ## [1.7.2] - 2026-02-05
 
 ### Fixed
