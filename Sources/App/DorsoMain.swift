@@ -1,11 +1,11 @@
 import AppKit
 #if SWIFT_PACKAGE
-import PosturrCore
+import DorsoCore
 #endif
 
 @main
 @MainActor
-struct PosturrMain {
+struct DorsoMain {
     static func main() {
         let app = NSApplication.shared
         let delegate = AppDelegate()

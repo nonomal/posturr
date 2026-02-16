@@ -60,7 +60,7 @@ Claude will:
 ## Step 4: Build and Test
 
 ```bash
-./build.sh && rm -rf /Applications/Posturr.app && cp -r build/Posturr.app /Applications/ && open /Applications/Posturr.app
+./build.sh && rm -rf /Applications/Dorso.app && cp -r build/Dorso.app /Applications/ && open /Applications/Dorso.app
 ```
 
 ## Technical Notes

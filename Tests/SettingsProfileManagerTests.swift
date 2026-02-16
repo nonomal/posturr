@@ -1,6 +1,6 @@
 import AppKit
 import XCTest
-@testable import PosturrCore
+@testable import DorsoCore
 
 @MainActor
 final class SettingsProfileManagerTests: XCTestCase {

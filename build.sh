@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Posturr Build Script
+# Dorso Build Script
 # Compiles the app and creates the app bundle
 #
 # Usage:
@@ -11,7 +11,7 @@
 set -e
 
 # Configuration
-APP_NAME="Posturr"
+APP_NAME="Dorso"
 BUNDLE_ID="com.thelazydeveloper.posturr"
 VERSION="1.8.2"
 BUILD_NUMBER="5"
@@ -134,11 +134,11 @@ cat > "$CONTENTS/Info.plist" << EOF
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.healthcare-fitness</string>
     <key>NSCameraUsageDescription</key>
-    <string>Posturr needs camera access to monitor your posture and blur the screen when you slouch.</string>
+    <string>Dorso needs camera access to monitor your posture and blur the screen when you slouch.</string>
     <key>NSMotionUsageDescription</key>
-    <string>Posturr needs access to motion data to monitor your posture using AirPods.</string>
+    <string>Dorso needs access to motion data to monitor your posture using AirPods.</string>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Posturr uses Bluetooth to detect paired AirPods for head motion tracking.</string>
+    <string>Dorso uses Bluetooth to detect paired AirPods for head motion tracking.</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>CFBundleIconFile</key>
@@ -175,9 +175,9 @@ if [ -f "$SCRIPT_DIR/AppIcon.icon/icon.json" ]; then
 elif [ -f "$SCRIPT_DIR/AppIcon.icns" ]; then
     echo "Copying app icon..."
     cp "$SCRIPT_DIR/AppIcon.icns" "$RESOURCES_DIR/AppIcon.icns"
-elif [ -d "$SCRIPT_DIR/Posturr.iconset" ]; then
+elif [ -d "$SCRIPT_DIR/Dorso.iconset" ]; then
     echo "Converting iconset to icns..."
-    iconutil -c icns -o "$RESOURCES_DIR/AppIcon.icns" "$SCRIPT_DIR/Posturr.iconset"
+    iconutil -c icns -o "$RESOURCES_DIR/AppIcon.icns" "$SCRIPT_DIR/Dorso.iconset"
 else
     echo -e "${YELLOW}Warning: No app icon found. The app will use default icon.${NC}"
 fi
@@ -217,7 +217,7 @@ fi
 echo "Creating entitlements..."
 if [ "$APP_STORE_BUILD" = true ]; then
     # App Store entitlements (requires App Sandbox)
-    cat > "$BUILD_DIR/Posturr.entitlements" << EOF
+    cat > "$BUILD_DIR/Dorso.entitlements" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -237,7 +237,7 @@ if [ "$APP_STORE_BUILD" = true ]; then
 EOF
 else
     # Direct distribution entitlements (hardened runtime, no sandbox)
-    cat > "$BUILD_DIR/Posturr.entitlements" << EOF
+    cat > "$BUILD_DIR/Dorso.entitlements" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">

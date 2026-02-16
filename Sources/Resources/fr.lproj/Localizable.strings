@@ -1,4 +1,4 @@
-/* Posturr - French Localizable Strings */
+/* Dorso - French Localizable Strings */
 
 // MARK: - Menu Bar (MenuBar.swift)
 
@@ -9,9 +9,9 @@
 "menu.settings" = "Réglages";
 "menu.quit" = "Quitter";
 
-// MARK: - App Menu (PosturrMain.swift)
+// MARK: - App Menu (DorsoMain.swift)
 
-"appmenu.quit" = "Quitter Posturr";
+"appmenu.quit" = "Quitter Dorso";
 "appmenu.closeWindow" = "Fermer la fenêtre";
 "appmenu.file" = "Fichier";
 "appmenu.edit" = "Édition";
@@ -133,16 +133,16 @@
 "settings.detection" = "Détection";
 "settings.detection.help" = "Équilibre entre réactivité et batterie. Réactif détecte rapidement, Performance économise la batterie.";
 "settings.launchAtLogin" = "Lancer au démarrage";
-"settings.launchAtLogin.help" = "Démarrer Posturr automatiquement à l'ouverture de session";
+"settings.launchAtLogin.help" = "Démarrer Dorso automatiquement à l'ouverture de session";
 "settings.showInDock" = "Afficher dans le Dock";
-"settings.showInDock.help" = "Garder Posturr dans le Dock et Cmd+Tab";
+"settings.showInDock.help" = "Garder Dorso dans le Dock et Cmd+Tab";
 "settings.blurWhenAway" = "Flouter en cas d'absence";
 "settings.blurWhenAway.help.camera" = "Appliquer un flou complet lorsque vous vous absentez";
 "settings.blurWhenAway.help.airpods" = "Appliquer un flou complet lorsque vous vous absentez. Disponible uniquement avec la caméra pour la détection.";
 "settings.pauseOnTheGo" = "Pause en déplacement";
 "settings.pauseOnTheGo.help" = "Pause automatique sur l'écran du portable uniquement";
 "settings.shortcut" = "Raccourci";
-"settings.shortcut.help" = "Raccourci clavier global pour activer/désactiver Posturr. Cliquez sur le champ et appuyez sur la combinaison de touches souhaitée.";
+"settings.shortcut.help" = "Raccourci clavier global pour activer/désactiver Dorso. Cliquez sur le champ et appuyez sur la combinaison de touches souhaitée.";
 "settings.shortcut.press" = "Appuyez...";
 "settings.compatibilityMode" = "Mode de compatibilité";
 "settings.compatibilityMode.help" = "Activez si le flou n'apparaît pas";
@@ -174,7 +174,7 @@
 
 // MARK: - Onboarding (OnboardingWindow.swift)
 
-"onboarding.title" = "Bienvenue dans Posturr";
+"onboarding.title" = "Bienvenue dans Dorso";
 "onboarding.subtitle" = "Choisissez comment suivre votre posture";
 "onboarding.selectCamera" = "Sélectionner la caméra";
 "onboarding.pairedAirPods" = "AirPods jumelés";

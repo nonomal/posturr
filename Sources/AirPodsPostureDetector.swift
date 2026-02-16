@@ -3,7 +3,7 @@ import CoreMotion
 import IOBluetooth
 import os.log
 
-private let log = OSLog(subsystem: "com.posturr", category: "AirPodsDetector")
+private let log = OSLog(subsystem: "com.thelazydeveloper.dorso", category: "AirPodsDetector")
 
 /// Represents a paired AirPods device
 struct PairedAirPods {

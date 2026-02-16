@@ -516,7 +516,7 @@ struct SettingsView: View {
                         .resizable()
                         .frame(width: 28, height: 28)
                 }
-                Text("Posturr")
+                Text("Dorso")
                     .font(.system(size: 15, weight: .semibold))
 
                 Spacer()

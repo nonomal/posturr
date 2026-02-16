@@ -1,4 +1,4 @@
-/* Posturr - German Localizable Strings */
+/* Dorso - German Localizable Strings */
 
 // MARK: - Menu Bar (MenuBar.swift)
 
@@ -9,9 +9,9 @@
 "menu.settings" = "Einstellungen";
 "menu.quit" = "Beenden";
 
-// MARK: - App Menu (PosturrMain.swift)
+// MARK: - App Menu (DorsoMain.swift)
 
-"appmenu.quit" = "Posturr beenden";
+"appmenu.quit" = "Dorso beenden";
 "appmenu.closeWindow" = "Fenster schließen";
 "appmenu.file" = "Ablage";
 "appmenu.edit" = "Bearbeiten";
@@ -133,16 +133,16 @@
 "settings.detection" = "Erkennung";
 "settings.detection.help" = "Balance zwischen Reaktionsfähigkeit und Akku. Reaktiv erkennt schnell, Leistung schont den Akku.";
 "settings.launchAtLogin" = "Beim Anmelden starten";
-"settings.launchAtLogin.help" = "Posturr automatisch beim Anmelden starten";
+"settings.launchAtLogin.help" = "Dorso automatisch beim Anmelden starten";
 "settings.showInDock" = "Im Dock anzeigen";
-"settings.showInDock.help" = "Posturr im Dock und bei Cmd+Tab anzeigen";
+"settings.showInDock.help" = "Dorso im Dock und bei Cmd+Tab anzeigen";
 "settings.blurWhenAway" = "Bei Abwesenheit unscharf";
 "settings.blurWhenAway.help.camera" = "Volle Unschärfe anwenden, wenn Sie sich entfernen";
 "settings.blurWhenAway.help.airpods" = "Volle Unschärfe anwenden, wenn Sie sich entfernen. Nur verfügbar bei Kamera-Erkennung.";
 "settings.pauseOnTheGo" = "Unterwegs pausieren";
 "settings.pauseOnTheGo.help" = "Automatisch pausieren bei reinem Laptop-Display";
 "settings.shortcut" = "Tastenkürzel";
-"settings.shortcut.help" = "Globales Tastenkürzel zum Ein-/Ausschalten von Posturr. Klicken Sie auf das Feld und drücken Sie die gewünschte Tastenkombination.";
+"settings.shortcut.help" = "Globales Tastenkürzel zum Ein-/Ausschalten von Dorso. Klicken Sie auf das Feld und drücken Sie die gewünschte Tastenkombination.";
 "settings.shortcut.press" = "Drücken...";
 "settings.compatibilityMode" = "Kompatibilitätsmodus";
 "settings.compatibilityMode.help" = "Aktivieren, wenn die Unschärfe nicht erscheint";
@@ -174,7 +174,7 @@
 
 // MARK: - Onboarding (OnboardingWindow.swift)
 
-"onboarding.title" = "Willkommen bei Posturr";
+"onboarding.title" = "Willkommen bei Dorso";
 "onboarding.subtitle" = "Wählen Sie, wie Sie Ihre Haltung überwachen möchten";
 "onboarding.selectCamera" = "Kamera auswählen";
 "onboarding.pairedAirPods" = "Gekoppelte AirPods";

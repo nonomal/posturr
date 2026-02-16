@@ -2,7 +2,7 @@
 
 ## Overview
 
-Posturr automatically saves and restores calibration profiles based on display configuration. Each unique monitor setup has its own calibration profile, allowing seamless transitions between workstations.
+Dorso automatically saves and restores calibration profiles based on display configuration. Each unique monitor setup has its own calibration profile, allowing seamless transitions between workstations.
 
 ## Core Concepts
 

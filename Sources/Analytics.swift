@@ -34,7 +34,7 @@ struct DailyStats: Codable, Identifiable {
 class AnalyticsManager: ObservableObject {
     static let shared = AnalyticsManager()
 
-    private static let logger = Logger(subsystem: "com.posturr", category: "Analytics")
+    private static let logger = Logger(subsystem: "com.thelazydeveloper.dorso", category: "Analytics")
     
     @Published var todayStats: DailyStats
     private var history: [String: DailyStats] = [:]
@@ -51,7 +51,7 @@ class AnalyticsManager: ObservableObject {
         fileURL: URL? = nil,
         calendar: Calendar = .current,
         now: @escaping () -> Date = Date.init,
-        persistenceQueue: DispatchQueue = DispatchQueue(label: "posturr.analytics.persistence", qos: .utility)
+        persistenceQueue: DispatchQueue = DispatchQueue(label: "dorso.analytics.persistence", qos: .utility)
     ) {
         self.calendar = calendar
         self.now = now
@@ -90,7 +90,7 @@ class AnalyticsManager: ObservableObject {
     private static func defaultFileURL(fileManager: FileManager) -> URL {
         let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
         let baseDir = appSupport ?? fileManager.temporaryDirectory
-        let appDir = baseDir.appendingPathComponent("Posturr", isDirectory: true)
+        let appDir = baseDir.appendingPathComponent("Dorso", isDirectory: true)
         return appDir.appendingPathComponent("analytics.json")
     }
     

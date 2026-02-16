@@ -3,7 +3,7 @@ import AVFoundation
 import Vision
 import os.log
 
-private let log = OSLog(subsystem: "com.posturr", category: "AppDelegate")
+private let log = OSLog(subsystem: "com.thelazydeveloper.dorso", category: "AppDelegate")
 
 // MARK: - MenuBarIconType to MenuBarIcon Conversion
 

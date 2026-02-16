@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Posturr Release Script
+# Dorso Release Script
 # Creates a new release with build, signing, notarization, DMG, and GitHub release
 
 set -e
@@ -17,7 +17,7 @@ cd "$SCRIPT_DIR"
 
 # Code signing identity
 DEVELOPER_ID="Developer ID Application: Thomas Johnell (KBF2YGT2KP)"
-NOTARY_PROFILE="notarytool-posturr"
+NOTARY_PROFILE="notarytool-dorso"
 
 # Check for required dependencies
 check_dependency() {
@@ -110,12 +110,12 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
 fi
 
 TAG="v$VERSION"
-ZIP_NAME="Posturr-$TAG.zip"
-DMG_NAME="Posturr-$TAG.dmg"
+ZIP_NAME="Dorso-$TAG.zip"
+DMG_NAME="Dorso-$TAG.dmg"
 
 echo ""
 echo -e "${CYAN}═══════════════════════════════════════${NC}"
-echo -e "${CYAN}  Posturr Release Script - $TAG${NC}"
+echo -e "${CYAN}  Dorso Release Script - $TAG${NC}"
 echo -e "${CYAN}═══════════════════════════════════════${NC}"
 echo ""
 
@@ -148,17 +148,17 @@ echo -e "${GREEN}[1/7] Building app...${NC}"
 
 # Step 2: Code sign with Developer ID
 echo -e "${GREEN}[2/7] Signing app with Developer ID...${NC}"
-codesign --force --options runtime --entitlements "build/Posturr.entitlements" --sign "$DEVELOPER_ID" --timestamp "build/Posturr.app"
+codesign --force --options runtime --entitlements "build/Dorso.entitlements" --sign "$DEVELOPER_ID" --timestamp "build/Dorso.app"
 
 # Verify signature
 echo "Verifying signature..."
-codesign --verify --deep --strict "build/Posturr.app"
+codesign --verify --deep --strict "build/Dorso.app"
 echo -e "${GREEN}Signature verified${NC}"
 
 # Step 3: Create ZIP for notarization
 echo -e "${GREEN}[3/7] Creating ZIP for notarization...${NC}"
 rm -f "build/$ZIP_NAME"
-cd build && zip -r "$ZIP_NAME" Posturr.app && cd ..
+cd build && zip -r "$ZIP_NAME" Dorso.app && cd ..
 
 # Step 4: Submit for notarization
 echo -e "${GREEN}[4/7] Submitting for notarization (this may take a few minutes)...${NC}"
@@ -166,30 +166,30 @@ xcrun notarytool submit "build/$ZIP_NAME" --keychain-profile "$NOTARY_PROFILE" -
 
 # Step 5: Staple the notarization ticket
 echo -e "${GREEN}[5/7] Stapling notarization ticket...${NC}"
-xcrun stapler staple "build/Posturr.app"
+xcrun stapler staple "build/Dorso.app"
 
 # Recreate ZIP with stapled app
 rm -f "build/$ZIP_NAME"
-cd build && zip -r "$ZIP_NAME" Posturr.app && cd ..
+cd build && zip -r "$ZIP_NAME" Dorso.app && cd ..
 
 # Step 6: Create DMG (with notarized app)
 echo -e "${GREEN}[6/7] Creating DMG...${NC}"
-hdiutil detach /Volumes/Posturr 2>/dev/null || true
+hdiutil detach /Volumes/Dorso 2>/dev/null || true
 rm -f "build/$DMG_NAME"
 
 create-dmg \
-    --volname "Posturr" \
-    --volicon "build/Posturr.app/Contents/Resources/AppIcon.icns" \
+    --volname "Dorso" \
+    --volicon "build/Dorso.app/Contents/Resources/AppIcon.icns" \
     --background "assets/dmg-background.png" \
     --window-pos 200 120 \
     --window-size 654 444 \
     --icon-size 140 \
     --text-size 12 \
-    --icon "Posturr.app" 197 195 \
-    --hide-extension "Posturr.app" \
+    --icon "Dorso.app" 197 195 \
+    --hide-extension "Dorso.app" \
     --app-drop-link 473 195 \
     "build/$DMG_NAME" \
-    build/Posturr.app
+    build/Dorso.app
 
 # Sign and notarize the DMG too
 echo "Signing DMG..."
@@ -206,7 +206,7 @@ echo -e "${GREEN}[7/7] Creating git tag and GitHub release...${NC}"
 git tag "$TAG"
 git push origin "$TAG"
 
-RELEASE_NOTES="## Posturr $TAG
+RELEASE_NOTES="## Dorso $TAG
 
 A macOS app that blurs your screen when you slouch.
 
@@ -222,7 +222,7 @@ A macOS app that blurs your screen when you slouch.
 ### Installation
 
 1. Download the \`.dmg\` or \`.zip\`
-2. Drag \`Posturr.app\` to Applications
+2. Drag \`Dorso.app\` to Applications
 3. Launch normally - no Gatekeeper warning!
 4. Grant camera permission, then complete calibration
 
@@ -234,7 +234,7 @@ if [ "$SKIP_GH_RELEASE" = "true" ]; then
     echo ""
     echo "To create the release manually, run:"
     echo -e "${CYAN}gh auth login${NC}"
-    echo -e "${CYAN}gh release create $TAG build/$ZIP_NAME build/$DMG_NAME --title \"Posturr $TAG\"${NC}"
+    echo -e "${CYAN}gh release create $TAG build/$ZIP_NAME build/$DMG_NAME --title \"Dorso $TAG\"${NC}"
 else
     # Delete existing release if present
     gh release delete "$TAG" --yes 2>/dev/null || true
@@ -243,7 +243,7 @@ else
     gh release create "$TAG" \
         "build/$ZIP_NAME" \
         "build/$DMG_NAME" \
-        --title "Posturr $TAG" \
+        --title "Dorso $TAG" \
         --notes "$RELEASE_NOTES"
 
     echo -e "${GREEN}Release created!${NC}"
