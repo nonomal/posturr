@@ -1,4 +1,4 @@
-# Dorso
+# Dorso (formerly Posturr)
 
 **A macOS app that blurs your screen when you slouch.**
 
