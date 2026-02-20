@@ -255,6 +255,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - App Lifecycle
 
     public func applicationDidFinishLaunching(_ notification: Notification) {
+        // Ensure analytics storage migration runs as soon as the app launches.
+        _ = AnalyticsManager.shared
+
         loadSettings()
 
         if showInDock {

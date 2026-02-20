@@ -35,6 +35,7 @@ class AnalyticsManager: ObservableObject {
     static let shared = AnalyticsManager()
 
     private static let logger = Logger(subsystem: "com.thelazydeveloper.dorso", category: "Analytics")
+    private static let legacyMigrationFlagKey = "analyticsMigratedPosturrToDorso.v1"
     
     @Published var todayStats: DailyStats
     private var history: [String: DailyStats] = [:]
@@ -69,6 +70,18 @@ class AnalyticsManager: ObservableObject {
             Self.logger.error("Failed to create analytics directory: \(error.localizedDescription, privacy: .public)")
         }
 
+        if fileURL == nil {
+            do {
+                _ = try Self.migrateLegacyAnalyticsIfNeeded(
+                    currentURL: resolvedURL,
+                    legacyURL: Self.legacyFileURL(fileManager: fileManager),
+                    migrationKey: Self.legacyMigrationFlagKey
+                )
+            } catch {
+                Self.logger.error("Legacy analytics migration failed: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+
         Self.logger.info("Initializing analytics. Storage: \(resolvedURL.path, privacy: .public)")
         
         // Initialize with default
@@ -92,6 +105,91 @@ class AnalyticsManager: ObservableObject {
         let baseDir = appSupport ?? fileManager.temporaryDirectory
         let appDir = baseDir.appendingPathComponent("Dorso", isDirectory: true)
         return appDir.appendingPathComponent("analytics.json")
+    }
+
+    private static func legacyFileURL(fileManager: FileManager) -> URL {
+        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+        let baseDir = appSupport ?? fileManager.temporaryDirectory
+        let legacyDir = baseDir.appendingPathComponent("Posturr", isDirectory: true)
+        return legacyDir.appendingPathComponent("analytics.json")
+    }
+
+    @discardableResult
+    static func migrateLegacyAnalyticsIfNeeded(
+        currentURL: URL,
+        legacyURL: URL,
+        migrationKey: String = legacyMigrationFlagKey,
+        userDefaults: UserDefaults = .standard,
+        fileManager: FileManager = .default
+    ) throws -> Bool {
+        guard !userDefaults.bool(forKey: migrationKey) else { return false }
+
+        guard fileManager.fileExists(atPath: legacyURL.path) else {
+            userDefaults.set(true, forKey: migrationKey)
+            return false
+        }
+
+        var mergedHistory: [String: DailyStats] = [:]
+        if fileManager.fileExists(atPath: currentURL.path) {
+            mergedHistory = try readHistory(from: currentURL)
+        }
+
+        let legacyHistory = try readHistory(from: legacyURL)
+        mergedHistory = merge(current: mergedHistory, with: legacyHistory)
+
+        try fileManager.createDirectory(
+            at: currentURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        let mergedData = try JSONEncoder().encode(mergedHistory)
+        try mergedData.write(to: currentURL, options: [.atomic])
+
+        userDefaults.set(true, forKey: migrationKey)
+        logger.info("Migrated legacy analytics from \(legacyURL.path, privacy: .public) to \(currentURL.path, privacy: .public); legacy file retained")
+        return true
+    }
+
+    private static func readHistory(from url: URL) throws -> [String: DailyStats] {
+        let data = try Data(contentsOf: url)
+        return try JSONDecoder().decode([String: DailyStats].self, from: data)
+    }
+
+    private static func merge(current: [String: DailyStats], with legacy: [String: DailyStats]) -> [String: DailyStats] {
+        var merged = current
+        for (dayKey, legacyStats) in legacy {
+            guard let currentStats = merged[dayKey] else {
+                merged[dayKey] = legacyStats
+                continue
+            }
+            merged[dayKey] = mergeDay(current: currentStats, with: legacyStats)
+        }
+        return merged
+    }
+
+    private static func mergeDay(current: DailyStats, with legacy: DailyStats) -> DailyStats {
+        if isEquivalent(current, legacy) {
+            return current
+        }
+
+        let totalSeconds = current.totalSeconds + legacy.totalSeconds
+        let slouchSeconds = min(totalSeconds, current.slouchSeconds + legacy.slouchSeconds)
+        let slouchCount = current.slouchCount + legacy.slouchCount
+        let date = min(current.date, legacy.date)
+
+        return DailyStats(
+            date: date,
+            totalSeconds: totalSeconds,
+            slouchSeconds: slouchSeconds,
+            slouchCount: slouchCount
+        )
+    }
+
+    private static func isEquivalent(_ lhs: DailyStats, _ rhs: DailyStats) -> Bool {
+        let tolerance: TimeInterval = 0.0001
+        return abs(lhs.totalSeconds - rhs.totalSeconds) < tolerance
+            && abs(lhs.slouchSeconds - rhs.slouchSeconds) < tolerance
+            && lhs.slouchCount == rhs.slouchCount
+            && lhs.dayKey == rhs.dayKey
     }
     
     private func startSaveTimer() {
