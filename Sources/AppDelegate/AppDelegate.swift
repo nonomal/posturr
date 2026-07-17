@@ -112,6 +112,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
     }
     var showInDock = false
     var pauseOnTheGo = false
+    var pauseOnBattery: Bool {
+        trackingStore.withState { $0.pauseOnBatteryEnabled }
+    }
     var useFullScreenOverlay = false
     var settingsWindowController = SettingsWindowController()
     var supportWindowController = SupportWindowController()
@@ -122,6 +125,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
     let displayMonitor = DisplayMonitor()
     let cameraObserver = CameraObserver()
     let screenLockObserver = ScreenLockObserver()
+    let powerSourceObserver = PowerSourceObserver()
     let hotkeyManager = HotkeyManager()
 
     lazy var trackingStore: StoreOf<TrackingFeature> = {
@@ -444,6 +448,14 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         screenLockObserver.startObserving()
+
+        // AC/battery power source
+        powerSourceObserver.onPowerSourceChanged = { [weak self] isOnBattery in
+            Task { @MainActor in
+                await self?.handlePowerSourceChanged(isOnBattery)
+            }
+        }
+        powerSourceObserver.startObserving()
 
         // Global hotkey
         hotkeyManager.configure(

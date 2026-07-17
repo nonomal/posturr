@@ -225,6 +225,10 @@ extension AppDelegate {
                 cameraProfile: context.profile
             )
         )
+
+        // Seed the current power source so launching on battery honors
+        // pause-on-battery without waiting for the first power transition.
+        await sendTrackingAction(.powerSourceChanged(isOnBattery: powerSourceObserver.isOnBattery))
     }
 
     private func makeInitialSetupContext() -> InitialSetupContext {
@@ -303,6 +307,11 @@ extension AppDelegate {
         pauseOnTheGo = isEnabled
         saveSettings()
         await sendTrackingAction(.pauseOnTheGoSettingChanged(isEnabled: isEnabled))
+    }
+
+    func setPauseOnBatteryEnabled(_ isEnabled: Bool) async {
+        await sendTrackingAction(.setPauseOnBatteryEnabled(isEnabled))
+        saveSettings()
     }
 
     // MARK: - Monitoring

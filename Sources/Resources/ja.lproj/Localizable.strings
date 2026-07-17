@@ -37,6 +37,7 @@
 "status.airPodsDisconnected" = "状態: AirPods 未接続";
 "status.pausedScreenLocked" = "状態: 一時停止 (画面ロック中)";
 "status.pausedPutInAirPods" = "状態: 一時停止 (AirPods を装着してください)";
+"status.pausedOnBattery" = "状態: 一時停止 (バッテリー駆動中)";
 
 // MARK: - Menu Bar Icon Accessibility (Models.swift)
 
@@ -154,6 +155,8 @@
 "settings.blurWhenAway.help.airpods" = "離席時に完全なぼかしを適用。カメラでの検出時のみ利用可能です。";
 "settings.pauseOnTheGo" = "移動中は一時停止";
 "settings.pauseOnTheGo.help" = "ノートパソコンのディスプレイのみの場合に自動一時停止";
+"settings.pauseOnBattery" = "バッテリー駆動中は一時停止";
+"settings.pauseOnBattery.help" = "バッテリー駆動中は自動的に一時停止して電力を節約";
 "settings.fullScreenOverlay" = "全画面オーバーレイ";
 "settings.fullScreenOverlay.help" = "Dockとメニューバーにも効果を広げる";
 "settings.shortcut" = "ショートカット";

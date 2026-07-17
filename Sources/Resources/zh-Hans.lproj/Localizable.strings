@@ -37,6 +37,7 @@
 "status.airPodsDisconnected" = "状态：AirPods 已断开";
 "status.pausedScreenLocked" = "状态：已暂停（屏幕已锁定）";
 "status.pausedPutInAirPods" = "状态：已暂停（请佩戴 AirPods）";
+"status.pausedOnBattery" = "状态：已暂停（电池供电）";
 
 // MARK: - Menu Bar Icon Accessibility (Models.swift)
 
@@ -154,6 +155,8 @@
 "settings.blurWhenAway.help.airpods" = "离开时应用完全模糊。仅在使用摄像头检测时可用。";
 "settings.pauseOnTheGo" = "移动中暂停";
 "settings.pauseOnTheGo.help" = "仅使用笔记本显示屏时自动暂停";
+"settings.pauseOnBattery" = "电池供电时暂停";
+"settings.pauseOnBattery.help" = "使用电池时自动暂停以省电";
 "settings.fullScreenOverlay" = "全屏覆盖";
 "settings.fullScreenOverlay.help" = "将效果延伸至程序坞和菜单栏";
 "settings.shortcut" = "快捷键";

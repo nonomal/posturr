@@ -17,6 +17,7 @@ struct SettingsView: View {
     @State private var blurWhenAway: Bool
     @State private var showInDock: Bool
     @State private var pauseOnTheGo: Bool
+    @State private var pauseOnBattery: Bool
     @State private var useCompatibilityMode: Bool
     @State private var useFullScreenOverlay: Bool
     @State private var selectedCameraID: String
@@ -82,6 +83,7 @@ struct SettingsView: View {
         _blurWhenAway = State(initialValue: appDelegate.blurWhenAway)
         _showInDock = State(initialValue: appDelegate.showInDock)
         _pauseOnTheGo = State(initialValue: appDelegate.pauseOnTheGo)
+        _pauseOnBattery = State(initialValue: appDelegate.pauseOnBattery)
         _useCompatibilityMode = State(initialValue: appDelegate.useCompatibilityMode)
         _useFullScreenOverlay = State(initialValue: appDelegate.useFullScreenOverlay)
         _selectedCameraID = State(initialValue: appDelegate.selectedCameraID ?? cameras.first?.uniqueID ?? "")
@@ -564,8 +566,17 @@ struct SettingsView: View {
                         appDelegate.rebuildOverlayWindows()
                     }
 
-                    Spacer()
-                        .frame(maxWidth: .infinity)
+                    CompactToggle(
+                        title: L("settings.pauseOnBattery"),
+                        helpText: L("settings.pauseOnBattery.help"),
+                        isOn: $pauseOnBattery
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onChange(of: pauseOnBattery) { newValue in
+                        Task { @MainActor in
+                            await appDelegate.setPauseOnBatteryEnabled(newValue)
+                        }
+                    }
                 }
 
                 // Shortcut row

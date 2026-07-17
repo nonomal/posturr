@@ -37,6 +37,7 @@
 "status.airPodsDisconnected" = "Status: AirPods disconnected";
 "status.pausedScreenLocked" = "Status: Paused (screen locked)";
 "status.pausedPutInAirPods" = "Status: Paused (put in AirPods)";
+"status.pausedOnBattery" = "Status: Paused (on battery)";
 
 // MARK: - Menu Bar Icon Accessibility (Models.swift)
 
@@ -154,6 +155,8 @@
 "settings.blurWhenAway.help.airpods" = "Apply full blur when you step away. Only available when using camera for detection.";
 "settings.pauseOnTheGo" = "Pause on the go";
 "settings.pauseOnTheGo.help" = "Auto-pause on laptop-only display";
+"settings.pauseOnBattery" = "Pause on battery";
+"settings.pauseOnBattery.help" = "Auto-pause to save power when on battery";
 "settings.fullScreenOverlay" = "Full screen overlay";
 "settings.fullScreenOverlay.help" = "Extend effects over the dock and menu bar";
 "settings.shortcut" = "Shortcut";
