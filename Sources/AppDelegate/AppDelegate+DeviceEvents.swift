@@ -75,7 +75,16 @@ extension AppDelegate {
     }
 
     func handleScreenUnlocked() async {
+        // The power source may have changed while the lid was closed or the
+        // screen locked; refresh so the unlock transition sees the true state.
+        await sendTrackingAction(.powerSourceChanged(isOnBattery: powerSourceObserver.isOnBattery))
         await sendTrackingAction(.screenUnlocked)
+    }
+
+    // MARK: - Power Source
+
+    func handlePowerSourceChanged(_ isOnBattery: Bool) async {
+        await sendTrackingAction(.powerSourceChanged(isOnBattery: isOnBattery))
     }
 
     // MARK: - Display Configuration

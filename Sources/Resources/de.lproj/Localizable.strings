@@ -37,6 +37,7 @@
 "status.airPodsDisconnected" = "Status: AirPods getrennt";
 "status.pausedScreenLocked" = "Status: Pausiert (Bildschirm gesperrt)";
 "status.pausedPutInAirPods" = "Status: Pausiert (AirPods einsetzen)";
+"status.pausedOnBattery" = "Status: Pausiert (Akkubetrieb)";
 
 // MARK: - Menu Bar Icon Accessibility (Models.swift)
 
@@ -154,6 +155,8 @@
 "settings.blurWhenAway.help.airpods" = "Volle Unschärfe anwenden, wenn Sie sich entfernen. Nur verfügbar bei Kamera-Erkennung.";
 "settings.pauseOnTheGo" = "Unterwegs pausieren";
 "settings.pauseOnTheGo.help" = "Automatisch pausieren bei reinem Laptop-Display";
+"settings.pauseOnBattery" = "Im Akkubetrieb pausieren";
+"settings.pauseOnBattery.help" = "Automatisch pausieren, um im Akkubetrieb Strom zu sparen";
 "settings.fullScreenOverlay" = "Vollbild-Overlay";
 "settings.fullScreenOverlay.help" = "Effekte auf Dock und Menüleiste ausdehnen";
 "settings.shortcut" = "Tastenkürzel";

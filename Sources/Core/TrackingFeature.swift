@@ -55,6 +55,8 @@ struct TrackingFeature: Reducer {
         var monitoringState = PostureMonitoringState()
         var postureConfig = PostureConfig()
         var lastPostureReadingTime: Date?
+        var pauseOnBatteryEnabled: Bool = false
+        var isOnBattery: Bool = false
 
         init(
             appState: AppState = .disabled,
@@ -68,7 +70,9 @@ struct TrackingFeature: Reducer {
             stateBeforeLock: AppState? = nil,
             monitoringState: PostureMonitoringState = PostureMonitoringState(),
             postureConfig: PostureConfig = PostureConfig(),
-            lastPostureReadingTime: Date? = nil
+            lastPostureReadingTime: Date? = nil,
+            pauseOnBatteryEnabled: Bool = false,
+            isOnBattery: Bool = false
         ) {
             self.appState = appState
             self.trackingMode = trackingMode
@@ -82,6 +86,8 @@ struct TrackingFeature: Reducer {
             self.monitoringState = monitoringState
             self.postureConfig = postureConfig
             self.lastPostureReadingTime = lastPostureReadingTime
+            self.pauseOnBatteryEnabled = pauseOnBatteryEnabled
+            self.isOnBattery = isOnBattery
         }
 
         func readiness(for source: TrackingSource) -> TrackingSourceReadiness {
@@ -148,6 +154,8 @@ struct TrackingFeature: Reducer {
         case calibrationCompleted(source: TrackingSource)
         case screenLocked
         case screenUnlocked
+        case powerSourceChanged(isOnBattery: Bool)
+        case setPauseOnBatteryEnabled(Bool)
         case displayConfigurationChanged(
             pauseOnTheGoEnabled: Bool,
             isLaptopOnlyConfiguration: Bool,
@@ -502,10 +510,38 @@ struct TrackingFeature: Reducer {
             case .screenUnlocked:
                 let result = PostureEngine.stateWhenScreenUnlocks(
                     currentState: state.appState,
-                    stateBeforeLock: state.stateBeforeLock
+                    stateBeforeLock: state.stateBeforeLock,
+                    pauseOnBatteryEnabled: state.pauseOnBatteryEnabled,
+                    isOnBattery: state.isOnBattery
                 )
                 state.appState = result.newState
                 state.stateBeforeLock = result.stateBeforeLock
+                if result.shouldRestartMonitoring {
+                    return finish(perform(.startMonitoring))
+                }
+                return finish()
+
+            case .powerSourceChanged(let isOnBattery):
+                state.isOnBattery = isOnBattery
+                let result = PostureEngine.stateWhenPowerSourceChanges(
+                    currentState: state.appState,
+                    isOnBattery: isOnBattery,
+                    pauseOnBatteryEnabled: state.pauseOnBatteryEnabled
+                )
+                state.appState = result.newState
+                if result.shouldRestartMonitoring {
+                    return finish(perform(.startMonitoring))
+                }
+                return finish()
+
+            case .setPauseOnBatteryEnabled(let isEnabled):
+                state.pauseOnBatteryEnabled = isEnabled
+                let result = PostureEngine.stateWhenPauseOnBatterySettingChanges(
+                    currentState: state.appState,
+                    isEnabled: isEnabled,
+                    isOnBattery: state.isOnBattery
+                )
+                state.appState = result.newState
                 if result.shouldRestartMonitoring {
                     return finish(perform(.startMonitoring))
                 }
@@ -588,6 +624,10 @@ struct TrackingFeature: Reducer {
     // MARK: - Automatic Mode Source Resolution
 
     private func resolveAutomaticSource(_ state: inout State) -> Effect<Action> {
+        // The battery pause is sticky: source readiness changes must not resume
+        // tracking. AC power, the setting, or a direct user action lifts it.
+        guard state.appState != .paused(.onBattery) else { return .none }
+
         let previousSource = state.activeSource
         let previousAppState = state.appState
         let prefReadiness = state.readiness(for: state.preferredSource)
