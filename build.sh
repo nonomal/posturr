@@ -136,6 +136,8 @@ cat > "$CONTENTS/Info.plist" << EOF
     <string>$VERSION</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
     <key>LSMinimumSystemVersion</key>
     <string>$MIN_MACOS</string>
     <key>LSUIElement</key>
