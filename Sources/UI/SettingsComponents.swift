@@ -186,6 +186,41 @@ struct SteppedSliderTrack: View {
     }
 }
 
+// MARK: - Brand Switch
+
+/// Pure-SwiftUI switch. The AppKit-backed Toggle loses its tint (falling
+/// back to the system accent) whenever NSApp.appearance changes at runtime;
+/// drawing it ourselves keeps the brand color stable and avoids scaling a
+/// native control.
+struct BrandSwitch: View {
+    @Binding var isOn: Bool
+    var isDisabled: Bool = false
+
+    var body: some View {
+        Button(action: { toggle() }) {
+            Capsule()
+                .fill(isOn ? Color.brandCyan : Color.primary.opacity(0.15))
+                .frame(width: 30, height: 18)
+                .overlay(alignment: isOn ? .trailing : .leading) {
+                    Circle()
+                        .fill(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, y: 0.5)
+                        .frame(width: 14, height: 14)
+                        .padding(2)
+                }
+        }
+        .buttonStyle(.plain)
+        .opacity(isDisabled ? 0.5 : 1.0)
+    }
+
+    func toggle() {
+        guard !isDisabled else { return }
+        withAnimation(.easeInOut(duration: 0.15)) {
+            isOn.toggle()
+        }
+    }
+}
+
 // MARK: - Compact Toggle
 
 struct CompactToggle: View {
@@ -196,14 +231,8 @@ struct CompactToggle: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Toggle("", isOn: $isOn)
-                .toggleStyle(.switch)
-                .tint(.brandCyan)
-                .labelsHidden()
-                .scaleEffect(0.65)
-                .frame(width: 32)
-                .disabled(isDisabled)
-                .opacity(isDisabled ? 0.5 : 1.0)
+            BrandSwitch(isOn: $isOn, isDisabled: isDisabled)
+                .frame(width: 32, alignment: .leading)
 
             Text(title)
                 .font(.system(size: 11))
@@ -217,7 +246,11 @@ struct CompactToggle: View {
         .frame(height: 22)
         .contentShape(Rectangle())
         .onTapGesture {
-            if !isDisabled { isOn.toggle() }
+            if !isDisabled {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isOn.toggle()
+                }
+            }
         }
     }
 }
@@ -920,12 +953,8 @@ struct CompactShortcutRecorder: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Toggle("", isOn: $isEnabled)
-                .toggleStyle(.switch)
-                .tint(.brandCyan)
-                .labelsHidden()
-                .scaleEffect(0.65)
-                .frame(width: 32)
+            BrandSwitch(isOn: $isEnabled)
+                .frame(width: 32, alignment: .leading)
                 .onChange(of: isEnabled) { _ in
                     onShortcutChange()
                 }
