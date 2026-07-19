@@ -609,10 +609,11 @@ struct SettingsView: View {
                     .onChange(of: useCompatibilityMode) { newValue in
                         appDelegate.useCompatibilityMode = newValue
                         appDelegate.saveSettings()
-                        appDelegate.currentBlurRadius = 0
-                        for blurView in appDelegate.blurViews {
-                            blurView.alphaValue = 0
-                        }
+                        // Clear both blur mechanisms, not just the visual
+                        // effect views: the CGS background blur radius of the
+                        // outgoing private-API path survives alpha resets and
+                        // would otherwise stay on screen indefinitely
+                        appDelegate.clearBlur()
                     }
                     #else
                     Spacer()
