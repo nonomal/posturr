@@ -478,15 +478,21 @@ struct SettingsView: View {
             // cards' header-control pattern), app-level toggles below
             SettingsCard(icon: "switch.2", title: L("settings.section.behavior")) {
                 CompactSegmentedPicker(
-                    selection: $appAppearance,
+                    // Side effects live in the binding so they run inside the
+                    // click action itself; the custom-drawn controls keep
+                    // their brand colors through the appearance change
+                    selection: Binding(
+                        get: { appAppearance },
+                        set: { newValue in
+                            appDelegate.appAppearance = newValue
+                            appDelegate.saveSettings()
+                            appDelegate.applyAppearance()
+                            appAppearance = newValue
+                        }
+                    ),
                     options: AppAppearance.allCases.map { ($0, $0.displayName) }
                 )
                 .frame(width: 170)
-                .onChange(of: appAppearance) { newValue in
-                    appDelegate.appAppearance = newValue
-                    appDelegate.saveSettings()
-                    appDelegate.applyAppearance()
-                }
                 .help(L("settings.appearance"))
             } content: {
                 VStack(spacing: 6) {

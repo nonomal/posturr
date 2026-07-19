@@ -14,8 +14,8 @@ set -e
 # Configuration
 APP_NAME="Dorso"
 BUNDLE_ID="com.thelazydeveloper.posturr"
-VERSION="1.15.0"
-BUILD_NUMBER="16"
+VERSION="1.15.1"
+BUILD_NUMBER="17"
 MIN_MACOS="13.0"
 
 # Sparkle auto-update (direct-distribution builds only; App Store builds
