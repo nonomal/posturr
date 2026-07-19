@@ -18,15 +18,24 @@ VERSION="1.13.0"
 BUILD_NUMBER="12"
 MIN_MACOS="13.0"
 
+# Sparkle auto-update (direct-distribution builds only; App Store builds
+# exclude Sparkle entirely and rely on the App Store for updates)
+SPARKLE_FEED_URL="https://raw.githubusercontent.com/tldev/dorso/main/appcast.xml"
+SPARKLE_PUBLIC_ED_KEY="DGZFLiX7GOAurNDYQQQaoR4Hb4csYScDIIiui74ZvLY="
+
 # Check for App Store build flag
 APP_STORE_BUILD=false
 DEV_BUILD=false
 BUILD_CONFIG="release"
-SWIFT_BUILD_FLAGS=()
 if [[ "$*" == *"--appstore"* ]]; then
     APP_STORE_BUILD=true
-    SWIFT_BUILD_FLAGS=(-Xswiftc -D -Xswiftc APP_STORE)
+    # -dead_strip_dylibs removes the Sparkle load command (all Sparkle code is
+    # compiled out via APP_STORE, so nothing references it)
+    SWIFT_BUILD_FLAGS=(-Xswiftc -D -Xswiftc APP_STORE -Xlinker -dead_strip_dylibs)
     echo "Building for App Store (no private APIs)..."
+else
+    # Resolve the embedded Sparkle.framework from Contents/Frameworks
+    SWIFT_BUILD_FLAGS=(-Xlinker -rpath -Xlinker @executable_path/../Frameworks)
 fi
 if [[ "$*" == *"--dev"* ]]; then
     DEV_BUILD=true
@@ -115,6 +124,21 @@ else
     rm "$MACOS_DIR/${APP_NAME}_arm64" "$MACOS_DIR/${APP_NAME}_x86"
 fi
 
+# Embed Sparkle.framework (direct-distribution builds only)
+if [ "$APP_STORE_BUILD" = false ]; then
+    SPARKLE_FRAMEWORK="$SCRIPT_DIR/.build/artifacts/sparkle/Sparkle/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework"
+    if [ ! -d "$SPARKLE_FRAMEWORK" ]; then
+        echo -e "${RED}Error: Sparkle.framework not found at $SPARKLE_FRAMEWORK${NC}"
+        echo "Run 'swift package resolve' to fetch it."
+        exit 1
+    fi
+    echo "Embedding Sparkle.framework..."
+    mkdir -p "$CONTENTS/Frameworks"
+    # ditto preserves the framework's internal symlinks (required for a valid
+    # code signature)
+    ditto "$SPARKLE_FRAMEWORK" "$CONTENTS/Frameworks/Sparkle.framework"
+fi
+
 # Create Info.plist
 echo "Creating Info.plist..."
 cat > "$CONTENTS/Info.plist" << EOF
@@ -170,6 +194,15 @@ cat > "$CONTENTS/Info.plist" << EOF
 </dict>
 </plist>
 EOF
+
+# Sparkle update feed keys (direct-distribution builds only; App Store builds
+# must not reference an update feed)
+if [ "$APP_STORE_BUILD" = false ]; then
+    /usr/libexec/PlistBuddy \
+        -c "Add :SUFeedURL string $SPARKLE_FEED_URL" \
+        -c "Add :SUPublicEDKey string $SPARKLE_PUBLIC_ED_KEY" \
+        "$CONTENTS/Info.plist"
+fi
 
 # Compile app icon
 # Priority: .icon file (Icon Composer) > .icns file > .iconset folder
@@ -289,8 +322,9 @@ if [ -f "$MACOS_DIR/$APP_NAME" ]; then
     if [ "$1" == "--release" ]; then
         echo "Creating release archive..."
         RELEASE_NAME="$APP_NAME-v$VERSION.zip"
-        cd "$BUILD_DIR"
-        zip -r -q "$RELEASE_NAME" "$APP_NAME.app"
+        # ditto preserves Sparkle.framework's symlinks; zip -r would flatten
+        # them and break the code signature
+        ditto -c -k --keepParent "$APP_BUNDLE" "$BUILD_DIR/$RELEASE_NAME"
         echo -e "${GREEN}Release archive created: $BUILD_DIR/$RELEASE_NAME${NC}"
     fi
 else

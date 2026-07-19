@@ -26,6 +26,9 @@ struct SettingsView: View {
     @State private var warningColor: Color
     @State private var warningOnsetDelay: Double
     @State private var launchAtLogin: Bool
+    #if !APP_STORE
+    @State private var autoCheckForUpdates: Bool
+    #endif
     @State private var toggleShortcutEnabled: Bool
     @State private var toggleShortcut: KeyboardShortcut
     @State private var detectionModeSlider: Double
@@ -92,6 +95,9 @@ struct SettingsView: View {
         _warningColor = State(initialValue: Color(profileWarningColor))
         _warningOnsetDelay = State(initialValue: profileWarningOnsetDelay)
         _launchAtLogin = State(initialValue: SMAppService.mainApp.status == .enabled)
+        #if !APP_STORE
+        _autoCheckForUpdates = State(initialValue: appDelegate.updaterManager?.automaticallyChecksForUpdates ?? false)
+        #endif
         _toggleShortcutEnabled = State(initialValue: appDelegate.toggleShortcutEnabled)
         _toggleShortcut = State(initialValue: appDelegate.toggleShortcut)
         _detectionModeSlider = State(initialValue: Double(detectionModes.firstIndex(of: profileDetectionMode) ?? 0))
@@ -613,6 +619,23 @@ struct SettingsView: View {
                         .frame(maxWidth: .infinity)
                     #endif
                 }
+
+                #if !APP_STORE
+                HStack(spacing: 0) {
+                    CompactToggle(
+                        title: L("settings.autoUpdates"),
+                        helpText: L("settings.autoUpdates.help"),
+                        isOn: $autoCheckForUpdates
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onChange(of: autoCheckForUpdates) { newValue in
+                        appDelegate.updaterManager?.automaticallyChecksForUpdates = newValue
+                    }
+
+                    Spacer()
+                        .frame(maxWidth: .infinity)
+                }
+                #endif
             }
             .padding(.vertical, 10)
         }

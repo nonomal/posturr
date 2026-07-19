@@ -9,6 +9,7 @@
 "menu.analytics" = "統計";
 "menu.settings" = "設定";
 "menu.quit" = "終了";
+"menu.checkForUpdates" = "アップデートを確認…";
 
 // MARK: - App Menu (DorsoMain.swift)
 
@@ -148,6 +149,8 @@
 "settings.detection.help" = "応答速度とバッテリーのバランス。高速は素早く検出し、省エネはバッテリーを節約します。";
 "settings.launchAtLogin" = "ログイン時に起動";
 "settings.launchAtLogin.help" = "ログイン時に Dorso を自動的に起動";
+"settings.autoUpdates" = "自動アップデート";
+"settings.autoUpdates.help" = "バックグラウンドで新しいバージョンを確認し、インストールを提案";
 "settings.showInDock" = "Dock に表示";
 "settings.showInDock.help" = "Dorso を Dock と Cmd+Tab に表示";
 "settings.blurWhenAway" = "離席時にぼかす";
