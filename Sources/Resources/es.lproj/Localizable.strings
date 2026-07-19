@@ -9,6 +9,7 @@
 "menu.analytics" = "Estadísticas";
 "menu.settings" = "Ajustes";
 "menu.quit" = "Salir";
+"menu.checkForUpdates" = "Buscar actualizaciones…";
 
 // MARK: - App Menu (DorsoMain.swift)
 
@@ -148,6 +149,8 @@
 "settings.detection.help" = "Equilibrio entre capacidad de respuesta y duración de la batería. Reactiva detecta rápido, Rendimienta ahorra batería.";
 "settings.launchAtLogin" = "Iniciar al arrancar";
 "settings.launchAtLogin.help" = "Iniciar Dorso automáticamente al iniciar sesión";
+"settings.autoUpdates" = "Actualizaciones automáticas";
+"settings.autoUpdates.help" = "Buscar nuevas versiones en segundo plano y ofrecer instalarlas";
 "settings.showInDock" = "Mostrar en el dock";
 "settings.showInDock.help" = "Mantener Dorso en el Dock y Cmd+Tab";
 "settings.blurWhenAway" = "Desenfocar al ausentarse";

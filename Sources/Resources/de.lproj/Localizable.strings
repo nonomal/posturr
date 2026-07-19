@@ -9,6 +9,7 @@
 "menu.analytics" = "Statistiken";
 "menu.settings" = "Einstellungen";
 "menu.quit" = "Beenden";
+"menu.checkForUpdates" = "Nach Updates suchen…";
 
 // MARK: - App Menu (DorsoMain.swift)
 
@@ -148,6 +149,8 @@
 "settings.detection.help" = "Balance zwischen Reaktionsfähigkeit und Akku. Reaktiv erkennt schnell, Leistung schont den Akku.";
 "settings.launchAtLogin" = "Beim Anmelden starten";
 "settings.launchAtLogin.help" = "Dorso automatisch beim Anmelden starten";
+"settings.autoUpdates" = "Automatische Updates";
+"settings.autoUpdates.help" = "Im Hintergrund nach neuen Versionen suchen und deren Installation anbieten";
 "settings.showInDock" = "Im Dock anzeigen";
 "settings.showInDock.help" = "Dorso im Dock und bei Cmd+Tab anzeigen";
 "settings.blurWhenAway" = "Bei Abwesenheit unscharf";

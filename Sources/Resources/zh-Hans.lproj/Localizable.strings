@@ -9,6 +9,7 @@
 "menu.analytics" = "统计";
 "menu.settings" = "设置";
 "menu.quit" = "退出";
+"menu.checkForUpdates" = "检查更新…";
 
 // MARK: - App Menu (DorsoMain.swift)
 
@@ -148,6 +149,8 @@
 "settings.detection.help" = "在响应速度和电池之间取得平衡。快速响应检测迅速，省电模式节省电量。";
 "settings.launchAtLogin" = "登录时启动";
 "settings.launchAtLogin.help" = "登录时自动启动 Dorso";
+"settings.autoUpdates" = "自动更新";
+"settings.autoUpdates.help" = "在后台检查新版本并提示安装";
 "settings.showInDock" = "在程序坞中显示";
 "settings.showInDock.help" = "在程序坞和 Cmd+Tab 中显示 Dorso";
 "settings.blurWhenAway" = "离开时模糊";

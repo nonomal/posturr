@@ -31,6 +31,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
     // UI Components
     let menuBarManager = MenuBarManager()
 
+    #if !APP_STORE
+    /// Sparkle auto-updater. Created in applicationDidFinishLaunching (not
+    /// init) so headless tests constructing AppDelegate never start the
+    /// update machinery.
+    var updaterManager: UpdaterManager?
+    #endif
+
     // Overlay windows and blur
     var windows: [NSWindow] = []
     var blurViews: [NSVisualEffectView] = []
@@ -378,6 +385,10 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.applicationIconImage = applyMacOSIconMask(to: icon)
         }
 
+        #if !APP_STORE
+        updaterManager = UpdaterManager()
+        #endif
+
         setupDetectors()
         setupMenuBar()
         withAccessoryActivationPolicy {
@@ -505,6 +516,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.quit()
             }
         }
+        #if !APP_STORE
+        menuBarManager.onCheckForUpdates = { [weak self] in
+            Task { @MainActor in
+                self?.updaterManager?.checkForUpdates()
+            }
+        }
+        #endif
     }
 
     // MARK: - Menu Actions
